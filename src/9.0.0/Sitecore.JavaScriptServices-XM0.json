@@ -1,0 +1,285 @@
+{
+    "Parameters": {
+        "ServerPackage": {
+            "Type": "string",
+            "Description": "The path to the Server module package zip to convert and deploy.",
+            "DefaultValue": ""
+        },
+        "InfrastructurePackage": {
+            "Type": "string",
+            "Description": "The path to the Infrastructure module package zip to convert and deploy.",
+            "DefaultValue": ""
+        },
+        "SqlDbPrefix": {
+            "Type": "string",
+            "Description": "The prefix used for all Sql databases.",
+            "DefaultValue": ""
+        },
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "SitecoreAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "b",
+            "Description": "The admin password for the Sitecore instance."
+        },
+        "SqlAdminUser": {
+            "Type": "string",
+            "DefaultValue": "sa",
+            "Description": "The Sql admin user account to use when installing databases."
+        },
+        "SqlAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "12345",
+            "Description": "The Sql admin password to use when installing databases."
+        },
+        "SqlServer": {
+            "Type": "string",
+            "DefaultValue": ".\\SQLSERVER",
+            "Description": "The Sql Server where databases will be installed."
+        },
+        "FilesDirectory": {
+            "Type": "string",
+            "DefaultValue": ".\\templates\\files",
+            "Description": "The path of the folder that contains the files this configuration uses."
+        },
+        "NodeExtraCaCertsPath": {
+            "Type": "string",
+            "DefaultValue": "C:\\certificates\\SitecoreInstallFramework.cer",
+            "Description": "Path where the SIF root cert PEM is exported for NODE_EXTRA_CA_CERTS, when that env var is not already set."
+        },
+        "SifRootDnsName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore Install Framework",
+            "Description": "The DnsName SIF uses for its self-signed root CA (default $RootDnsName in Invoke-AddWebFeatureSSLTask)."
+        },
+        "SatToolsPath": {
+            "Type": "string",
+            "DefaultValue": ".\\lib\\sat\\tools",
+            "Description": "The path of the Sitecore Azure Toolkit tools folder used to convert the module packages."
+        }
+    },
+    "Register": {
+        "Tasks": {
+            "RemoveItem": "Remove-Item"
+        }
+    },
+    "Variables": {
+        "Files.Directory": "[resolvepath(parameter('FilesDirectory'))]",
+        "Site.PhysicalPath": "[joinpath(environment('SystemDrive'), 'inetpub', 'wwwroot', parameter('SiteName'))]",
+        "Sql.Database.Core": "[concat(parameter('SqlDbPrefix'), '_Core')]",
+        "Sql.Database.Master": "[concat(parameter('SqlDbPrefix'), '_Master')]",
+        "JavaScriptServices.DB.Core": "[SqlConnectionString(Server:parameter('SqlServer'),Database:variable('Sql.Database.Core'),UserName:parameter('SqlAdminUser'),Password:parameter('SqlAdminPassword'))]",
+        "JavaScriptServices.DB.Master": "[SqlConnectionString(Server:parameter('SqlServer'),Database:variable('Sql.Database.Master'),UserName:parameter('SqlAdminUser'),Password:parameter('SqlAdminPassword'))]",
+        "Package.Extract.Location": "[joinpath(environment('TEMP'), concat(parameter('SiteName'), '.jss-wdp'))]",
+        "Package.Extract.Dacpac.Core": "[joinpath(variable('Package.Extract.Location'), 'core.dacpac')]",
+        "Package.Extract.Dacpac.Master": "[joinpath(variable('Package.Extract.Location'), 'master.dacpac')]",
+        "Convert.Server.Directory": "[joinpath(environment('TEMP'), concat(parameter('SiteName'), '.jss-server'))]",
+        "Convert.Server.Package": "[joinpath(variable('Convert.Server.Directory'), 'module.scwdp.zip')]",
+        "Convert.Infrastructure.Directory": "[joinpath(environment('TEMP'), concat(parameter('SiteName'), '.jss-infrastructure'))]",
+        "Convert.Infrastructure.Package": "[joinpath(variable('Convert.Infrastructure.Directory'), 'module.scwdp.zip')]"
+    },
+    "Modules": [
+        ".\\Sitecore.JavaScriptServices-XM0.psm1",
+        ".\\templates\\module-hotfix.psm1"
+    ],
+    "Tasks": {
+        "CleanConvertLocations": {
+            "Description": "Creates (or empties) the temp folders the module packages are converted in.",
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Convert.Server.Directory')]", "[variable('Convert.Infrastructure.Directory')]" ]
+            }
+        },
+        "ConvertServerPackage": {
+            "Description": "Converts the Server module package to a Web Deploy package.",
+            "Type": "ConvertSitecoreModule",
+            "Params": {
+                "Path": "[resolvepath(parameter('ServerPackage'))]",
+                "SatToolsPath": "[resolvepath(parameter('SatToolsPath'))]",
+                "Destination": "[variable('Convert.Server.Directory')]"
+            }
+        },
+        "ConvertInfrastructurePackage": {
+            "Description": "Converts the Infrastructure module package to a Web Deploy package.",
+            "Type": "ConvertSitecoreModule",
+            "Params": {
+                "Path": "[resolvepath(parameter('InfrastructurePackage'))]",
+                "SatToolsPath": "[resolvepath(parameter('SatToolsPath'))]",
+                "Destination": "[variable('Convert.Infrastructure.Directory')]"
+            }
+        },
+        "StopWebsite": {
+            "Description": "Stops the website if it is running.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop"
+            }
+        },
+        "StopAppPool": {
+            "Description": "Stops the app pool if it is running.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop"
+            }
+        },
+        "CleanDacpacExtractLocation": {
+            "Description": "Creates (or empties) the temp folder the package is extracted to.",
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Package.Extract.Location')]" ]
+            }
+        },
+        "ExtractServerPackage": {
+            "Description": "Extracts the Server package.",
+            "Type": "Unpack",
+            "Params": {
+                "Source": "[variable('Convert.Server.Package')]",
+                "Destination": "[variable('Package.Extract.Location')]"
+            }
+        },
+        "InstallCoreDacpac": {
+            "Description": "Deploys core.dacpac.",
+            "Type": "WebDeploy",
+            "Params": {
+                "Verb": "Sync",
+                "Arguments": {
+                    "Source": {
+                        "dbDacFx": "[variable('Package.Extract.Dacpac.Core')]",
+                        "ScriptDatabaseOptions": "False"
+                    },
+                    "Dest": {
+                        "dbDacFx": "[variable('JavaScriptServices.DB.Core')]",
+                        "ScriptDatabaseOptions": "False"
+                    }
+                }
+            }
+        },
+        "InstallMasterDacpac": {
+            "Description": "Deploys master.dacpac.",
+            "Type": "WebDeploy",
+            "Params": {
+                "Verb": "Sync",
+                "Arguments": {
+                    "Source": {
+                        "dbDacFx": "[variable('Package.Extract.Dacpac.Master')]",
+                        "ScriptDatabaseOptions": "False"
+                    },
+                    "Dest": {
+                        "dbDacFx": "[variable('JavaScriptServices.DB.Master')]",
+                        "ScriptDatabaseOptions": "False"
+                    }
+                }
+            }
+        },
+        "InstallServerWDP": {
+            "Description": "Syncs the Server web deploy package with the website.",
+            "Type": "WebDeploy",
+            "Params": {
+                "Verb": "Sync",
+                "Arguments": {
+                    "Source": {
+                        "Package": "[variable('Convert.Server.Package')]"
+                    },
+                    "Dest": "Auto",
+                    "Skip": {
+                        "ObjectName": "dbDacFx"
+                    },
+                    "enableRule": "DoNotDeleteRule",
+                    "SetParam": [
+                        { "Name": "Application Path", "Value": "[parameter('SiteName')]" },
+                        { "Name": "Core Admin Connection String", "Value": "[variable('JavaScriptServices.DB.Core')]" },
+                        { "Name": "Master Admin Connection String", "Value": "[variable('JavaScriptServices.DB.Master')]" }
+                    ]
+                }
+            }
+        },
+        "InstallInfrastructureWDP": {
+            "Description": "Syncs the Infrastructure web deploy package with the website.",
+            "Type": "WebDeploy",
+            "Params": {
+                "Verb": "Sync",
+                "Arguments": {
+                    "Source": {
+                        "Package": "[variable('Convert.Infrastructure.Package')]"
+                    },
+                    "Dest": "Auto",
+                    "enableRule": "DoNotDeleteRule",
+                    "SetParam": [
+                        { "Name": "Application Path", "Value": "[parameter('SiteName')]" }
+                    ]
+                }
+            }
+        },
+        "TransformXmlDocuments": {
+            "Type": "TransformXmlDoc",
+            "Params": {
+                "RootDirectoryPath": "[variable('Site.PhysicalPath')]",
+                "XdtDirectory": "[joinpath(variable('Files.Directory'), 'javascript-services-9.0-tech-preview')]"
+            }
+        },
+        "StartAppPool": {
+            "Description": "Starts the app pool.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start"
+            }
+        },
+        "StartWebsite": {
+            "Description": "Starts the website.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start"
+            }
+        },
+        "CopyRunPostStepsPage": {
+            "Description": "Copies the RunPostSteps admin page to the website.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Files.Directory'), 'RunPostSteps.aspx')]",
+                "Destination": "[joinpath(variable('Site.PhysicalPath'), 'sitecore', 'admin')]"
+            }
+        },
+        "RunPostSteps": {
+            "Description": "Runs the Server package post step.",
+            "Type": "SitecoreUrl",
+            "Params": {
+                "SitecoreInstanceRoot": "[concat('https://', parameter('SiteName'))]",
+                "SitecoreActionPath": "sitecore/admin/RunPostSteps.aspx?poststeps=Sitecore_JavaScript_Services_Tech_Preview_Server&Sitecore_JavaScript_Services_Tech_Preview_Server.attributes=jss-import-role=sitecore\\JSS%20Import%20Service%20User",
+                "UserName": "admin",
+                "Password": "[parameter('SitecoreAdminPassword')]"
+            }
+        },
+        "RemoveRunPostStepsPage": {
+            "Description": "Removes the RunPostSteps admin page from the website.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[joinpath(variable('Site.PhysicalPath'), 'sitecore', 'admin', 'RunPostSteps.aspx')]",
+                "Force": true
+            }
+        },
+        "ExportSifRootCertForNode": {
+            "Description": "Exports the SIF root certificate as PEM and sets NODE_EXTRA_CA_CERTS.",
+            "Type": "ExportSifRootCertForNode",
+            "Params": {
+                "CertPath": "[parameter('NodeExtraCaCertsPath')]",
+                "RootDnsName": "[parameter('SifRootDnsName')]"
+            }
+        },
+        "CleanupConvertLocations": {
+            "Description": "Cleans up the conversion temp folders after deployment.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": [ "[variable('Convert.Server.Directory')]", "[variable('Convert.Infrastructure.Directory')]" ],
+                "Recurse": true,
+                "Force": true
+            }
+        }
+    }
+}

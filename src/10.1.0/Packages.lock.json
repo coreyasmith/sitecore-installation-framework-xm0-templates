@@ -1,0 +1,70 @@
+{
+    "Version": "10.1.0",
+    "Packages": [
+        {
+            "Name": "license.xml",
+            "Length": null,
+            "Sha256": null
+        },
+        {
+            "Name": "Sitecore 10.1.0 rev. 005207 (XM) (OnPrem)_cm.scwdp.zip",
+            "Length": 186181641,
+            "Sha256": "83A73E2C3C96494827D0BB92EB4B80EE91F4FF2F832CF3F0907924C654B9935B"
+        },
+        {
+            "Name": "Sitecore Experience Accelerator XM 10.1.0.3751.scwdp.zip",
+            "Length": 17586402,
+            "Sha256": "6419541851E5DD6C233D2EE3FF2816CFD2E84449F7B8D0EF455B74338667EECC"
+        },
+        {
+            "Name": "Sitecore Headless Services Server XM 18.0.0 rev. 00473.scwdp.zip",
+            "Length": 1707380,
+            "Sha256": "D2AA1370D0786746659F83B7D7C14FC8C4AABCDE312461356CE65A4948367E8D"
+        },
+        {
+            "Name": "Sitecore.IdentityServer.8.0.37.scwdp.zip",
+            "Length": 17379862,
+            "Sha256": "608B9754CF313CE54CBEB3E99A5157F9011E11163CF684322176351314E6E1D9"
+        },
+        {
+            "Name": "Sitecore.IdentityServer.UpgradeScripts.8.0.zip",
+            "Length": 1458,
+            "Sha256": "4AB629FB6AAE70B46199F5429EC47514F5039A01DE65A0EE8F23A2CA993A488C"
+        },
+        {
+            "Name": "Sitecore.ManagementServices 5.2.129.scwdp.zip",
+            "Length": 1625932,
+            "Sha256": "61A3EF0A588EF61D4B0E9F3E2A22D88E160AAB8B455E302FEC1CA4D4BD6AE9F3"
+        },
+        {
+            "Name": "Sitecore.PowerShell.Extensions-8.0.scwdp.zip",
+            "Length": 1827432,
+            "Sha256": "A5EF5730751C325AA21F69081DF8F50A8E18E4BCE5A2F41ABE0134E23352314C"
+        },
+        {
+            "Name": "Sitecore 10.1.4 rev. 013779 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip",
+            "Length": 31411388,
+            "Sha256": "2D6059ED91F7CD6D91C8C3BFE8DD74E7B866C411019693A172E9ECA39B4AA92D"
+        },
+        {
+            "Name": "Sitecore.IdentityServer 8.0 rev. 28 (OnPrem)_identityserver.cumulative.delta.scwdp.zip",
+            "Length": 2793,
+            "Sha256": "00E2DA131E3F545BD080C0DD65E540D64B9E3CF5A5F4E90BE0F74C30BCC6F371"
+        },
+        {
+            "Name": "SC Hotfix SXA-8159-1 10.1.0.3751.zip",
+            "Length": 1738146,
+            "Sha256": "B72FB2B3337DBF85EDC1D6B6F1C440E13B9B704D3B19D2D05836DE20B184D739"
+        },
+        {
+            "Name": "SC Hotfix-549890-1 Layout Service 7.1.0.zip",
+            "Length": 31345,
+            "Sha256": "7188D027CA20AE67473DD3835CC3C238EAEA9B3739E256619407AD3312FBFA76"
+        },
+        {
+            "Name": "SC Hotfix-569574-1 GraphQL 5.1.0.zip",
+            "Length": 772584,
+            "Sha256": "DB8C7D7E6F4663CF761E06FB65433E69C3E065052F6ADE1CA6789117765FDCE3"
+        }
+    ]
+}

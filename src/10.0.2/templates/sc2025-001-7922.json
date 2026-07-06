@@ -1,0 +1,28 @@
+{
+    "Parameters": {
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "FilesDirectory": {
+            "Type": "string",
+            "DefaultValue": ".\\templates\\files",
+            "Description": "The path of the folder that contains the files this configuration uses."
+        }
+    },
+    "Variables": {
+        "Files.Directory": "[resolvepath(parameter('FilesDirectory'))]",
+        "Site.PhysicalPath": "[joinpath(environment('SystemDrive'), 'inetpub', 'wwwroot', parameter('SiteName'))]"
+    },
+    "Tasks": {
+        "ApplyXdtTransformations": {
+            "Description": "Applies the XDT transform for the security patch.",
+            "Type": "TransformXmlDoc",
+            "Params": {
+                "RootDirectoryPath": "[variable('Site.PhysicalPath')]",
+                "XdtDirectory": "[joinpath(variable('Files.Directory'), 'sc2025-001-7922')]"
+            }
+        }
+    }
+}

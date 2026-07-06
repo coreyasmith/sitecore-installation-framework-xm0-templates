@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<system.webServer>
+		<rewrite xdt:Transform="InsertIfMissing">
+			<rules xdt:Transform="InsertIfMissing">
+				<rule name="Allow RadAsyncUpload and RadCloudUpload Post Requests" stopProcessing="true" xdt:Transform="InsertIfMissing" xdt:Locator="Match(name)">
+					<match url="Telerik.Web.UI.WebResource.axd" />
+					<conditions logicalGrouping="MatchAll">
+						<add input="{UrlDecode:{QUERY_STRING}}" pattern="^type=(rau|rcu)$" ignoreCase="true" />
+						<add input="{REQUEST_METHOD}" pattern="^POST$" ignoreCase="true" />
+					</conditions>
+					<action type="None" />
+				</rule>
+				<rule name="Block all GET requests containing Content-Type" stopProcessing="true" xdt:Transform="InsertIfMissing" xdt:Locator="Match(name)">
+					<match url="Telerik.Web.UI.WebResource.axd" ignoreCase="true" />
+					<conditions logicalGrouping="MatchAll">
+						<add input="{REQUEST_METHOD}" pattern="^GET$" ignoreCase="true" />
+						<add input="{HTTP_CONTENT_TYPE}" pattern=".+" ignoreCase="true" />
+					</conditions>
+					<action type="CustomResponse" statusCode="403" statusReason="Forbidden" statusDescription="Request blocked" />
+				</rule>
+				<rule name="Block PRType and Encoded Attacks" stopProcessing="true" xdt:Transform="InsertIfMissing" xdt:Locator="Match(name)">
+					<match url="Telerik.Web.UI.WebResource.axd" ignoreCase="true" />
+					<conditions logicalGrouping="MatchAny">
+						<add input="{UrlDecode:{QUERY_STRING}}" pattern="prtype=" ignoreCase="true" />
+						<add input="{UrlDecode:{HTTP_COOKIE}}" pattern="prtype=" ignoreCase="true" />
+						<add input="{REQUEST_METHOD}" pattern="^GET$" negate="true" ignoreCase="true" />
+					</conditions>
+					<action type="CustomResponse" statusCode="403" statusReason="Forbidden" statusDescription="Request blocked" />
+				</rule>
+			</rules>
+		</rewrite>
+	</system.webServer>
+</configuration>

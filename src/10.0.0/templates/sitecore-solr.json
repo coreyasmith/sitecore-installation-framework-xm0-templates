@@ -1,0 +1,126 @@
+{
+    "Parameters": {
+        "SolrUrl": {
+            "Type": "string",
+            "DefaultValue": "https://localhost:8983/solr",
+            "Description": "The Solr instance url."
+        },
+        "SolrRoot": {
+            "Type": "string",
+            "DefaultValue": "c:\\solr-8.4.0",
+            "Description": "The file path to the Solr instance."
+        },
+        "SolrService": {
+            "Type": "string",
+            "DefaultValue": "Solr-8.4.0",
+            "Description": "The name of the Solr service."
+        },
+        "BaseConfig": {
+            "Type": "string",
+            "DefaultValue": "_default",
+            "Description": "The configset to copy as a base for each core."
+        },
+        "CorePrefix": {
+            "Type": "string",
+            "DefaultValue": "sitecore",
+            "Description": "The prefix for each of the created indexes."
+        }
+    },
+    "Variables": {
+        "Solr.FullRoot":    "[resolvepath(parameter('SolrRoot'))]",
+        "Solr.Server":      "[joinpath(variable('Solr.FullRoot'), 'server', 'solr')]",
+        "Solr.BaseConfigs": "[joinpath(variable('Solr.Server'), 'configsets', parameter('BaseConfig'))]",
+        "Solr.SchemaFileName": "managed-schema",
+        "Solr.Xpath.SchemaRoot": "//schema",
+        "Solr.Xpath.UniqueKey": "[concat(variable('Solr.Xpath.SchemaRoot'), '/uniqueKey')]",
+        "Solr.UniqueField" : "_uniqueid",
+        "Solr.UniqueField.Attributes": {
+            "name" : "[variable('Solr.UniqueField')]",
+            "type": "string",
+            "indexed": "true",
+            "required": "true",
+            "stored": "true"
+        },
+
+        "Core.Name":        "[concat(parameter('CorePrefix'), '_core_index')]",
+        "Master.Name":      "[concat(parameter('CorePrefix'), '_master_index')]",
+        "Web.Name":         "[concat(parameter('CorePrefix'), '_web_index')]",
+
+        "Core.Root":        "[joinpath(variable('Solr.Server'), variable('Core.Name'))]",
+        "Master.Root":      "[joinpath(variable('Solr.Server'), variable('Master.Name'))]",
+        "Web.Root":         "[joinpath(variable('Solr.Server'), variable('Web.Name'))]",
+
+        "Core.Conf":        "[joinpath(variable('Core.Root'), 'conf')]",
+        "Master.Conf":      "[joinpath(variable('Master.Root'), 'conf')]",
+        "Web.Conf":         "[joinpath(variable('Web.Root'), 'conf')]"
+    },
+    "Tasks": {
+        "UnloadCores": {
+			"Description" : "Unloads existing Cores (if exists)",
+            "Type": "ManageSolrCore",
+            "Params": [
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Core.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue" },
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Master.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue" },
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Web.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue" }
+            ]
+        },
+        "CleanCores": {
+			"Description" : "Creates/clears core paths.",
+            "Type": "EnsurePath",
+            "Params":{
+                "Clean": [
+                    "[variable('Core.Root')]",
+                    "[variable('Master.Root')]",
+                    "[variable('Web.Root')]"
+                ]
+            }
+        },
+        "PrepareCores": {
+			"Description" : "Copies base configs into the core paths.",
+            "Type": "Copy",
+            "Params":[
+                { "Source": "[joinpath(variable('Solr.BaseConfigs'), '*')]", "Destination": "[variable('Core.Root')]" },
+                { "Source": "[joinpath(variable('Solr.BaseConfigs'), '*')]", "Destination": "[variable('Master.Root')]" },
+                { "Source": "[joinpath(variable('Solr.BaseConfigs'), '*')]", "Destination": "[variable('Web.Root')]" }
+            ]
+        },
+        "AddSchemaUniqueKeyField": {
+			"Description" : "Amends the core managed schema uniqueKey element.",
+            "Type": "SetXml",
+            "Params": [
+                { "FilePath": "[joinpath(variable('Core.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.SchemaRoot')]", "Element": "field", "Attributes": "[variable('Solr.UniqueField.Attributes')]" },
+                { "FilePath": "[joinpath(variable('Master.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.SchemaRoot')]", "Element": "field", "Attributes": "[variable('Solr.UniqueField.Attributes')]" },
+                { "FilePath": "[joinpath(variable('Web.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.SchemaRoot')]", "Element": "field", "Attributes": "[variable('Solr.UniqueField.Attributes')]" }
+            ]
+        },
+        "UpdateSchemaUniqueKey": {
+			"Description" : "Amends the core managed schema uniqueKey element.",
+            "Type": "SetXml",
+            "Params": [
+                { "FilePath": "[joinpath(variable('Core.Conf'), 'managed-schema')]", "Xpath":"[variable('Solr.Xpath.UniqueKey')]", "Value": "[variable('Solr.UniqueField')]" },
+                { "FilePath": "[joinpath(variable('Master.Conf'), 'managed-schema')]", "Xpath":"[variable('Solr.Xpath.UniqueKey')]", "Value": "[variable('Solr.UniqueField')]" },
+                { "FilePath": "[joinpath(variable('Web.Conf'), 'managed-schema')]", "Xpath":"[variable('Solr.Xpath.UniqueKey')]", "Value": "[variable('Solr.UniqueField')]" }
+            ]
+        },
+        "CreateCores":{
+			"Description" : "Tells Solr to create the new cores.",
+            "Type": "ManageSolrCore",
+            "Params": [
+                { "Action": "Create", "Address": "[parameter('SolrUrl')]", "Arguments": { "name": "[variable('Core.Name')]", "property.update.autoCreateFields": "false" } },
+                { "Action": "Create", "Address": "[parameter('SolrUrl')]", "Arguments": { "name": "[variable('Master.Name')]", "property.update.autoCreateFields": "false" } },
+                { "Action": "Create", "Address": "[parameter('SolrUrl')]", "Arguments": { "name": "[variable('Web.Name')]", "property.update.autoCreateFields": "false" } }
+            ]
+        }
+    },
+    "UninstallTasks": {
+        "RemoveCores": {
+            "Description": "Removes the cores and instance folders.",
+            "Type": "ManageSolrCore",
+            "Params": [
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Core.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue" },
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Master.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue" },
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Web.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue" }
+            ]
+        }
+    }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<location path="sitecore">
+		<system.webServer>
+			<httpProtocol>
+				<customHeaders>
+					<add name="Content-Security-Policy"
+						 value="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://xp-tracking.sitecorecloud.io https://web-sdk-eu.aptrinsic.com https://esp-eu.aptrinsic.com; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://web-sdk-eu.aptrinsic.com; font-src 'self' 'unsafe-inline' https://fonts.gstatic.com; upgrade-insecure-requests; block-all-mixed-content;"
+						 xdt:Transform="SetAttributes"
+						 xdt:Locator="Match(name)"/>
+				</customHeaders>
+			</httpProtocol>
+		</system.webServer>
+	</location>
+</configuration>

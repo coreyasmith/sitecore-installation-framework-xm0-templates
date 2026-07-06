@@ -1,0 +1,256 @@
+{
+    "Parameters": {
+        "SolrUrl": {
+            "Type": "string",
+            "DefaultValue": "https://localhost:8983/solr",
+            "Description": "The Solr instance url."
+        },
+        "SolrRoot": {
+            "Type": "string",
+            "DefaultValue": "c:\\solr-10.0.0",
+            "Description": "The file path to the Solr instance."
+        },
+        "SolrAdminUserName": {
+            "Type": "string",
+            "DefaultValue": "admin",
+            "Description": "The admin username for the Solr instance."
+        },
+        "SolrAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The admin password for the Solr instance."
+        },
+        "SolrConnectionUserName": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The connection username for the Solr instance. Falls back to CorePrefix when empty."
+        },
+        "SolrConnectionUserPassword": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The connection password for the Solr instance."
+        },
+        "SolrService": {
+            "Type": "string",
+            "DefaultValue": "Solr-10.0.0",
+            "Description": "The name of the Solr service."
+        },
+        "BaseConfig": {
+            "Type": "string",
+            "DefaultValue": "_default",
+            "Description": "The configset to copy as a base for each core."
+        },
+        "CorePrefix": {
+            "Type": "string",
+            "DefaultValue": "sitecore",
+            "Description": "The prefix for each of the created indexes."
+        },
+        "Update": {
+            "Type": "bool",
+            "Description": "The parameter for the installing delta WDP packages.",
+            "DefaultValue": false
+        }
+    },
+    "Variables": {
+        "Solr.FullRoot":    "[resolvepath(parameter('SolrRoot'))]",
+        "Solr.Server":      "[joinpath(variable('Solr.FullRoot'), 'server', 'solr')]",
+        "Solr.BaseConfigs": "[joinpath(variable('Solr.Server'), 'configsets', parameter('BaseConfig'))]",
+        "Solr.SchemaFileName": "managed-schema.xml",
+        "Solr.Xpath.SchemaRoot": "//schema",
+        "Solr.Xpath.UniqueKey": "[concat(variable('Solr.Xpath.SchemaRoot'), '/uniqueKey')]",
+        "Solr.UniqueField" : "_uniqueid",
+        "Solr.UniqueField.Attributes": {
+            "name" : "[variable('Solr.UniqueField')]",
+            "type": "string",
+            "indexed": "true",
+            "required": "true",
+            "stored": "true"
+        },
+        "Solr.ConfigFileName": "solrconfig.xml",
+        "Solr.Xpath.Configroot":"//config",
+        "Solr.Xpath.MaxFields.Selector":"[@name='maxFields']",
+        "Solr.Xpath.MaxFields": "[concat(variable('Solr.Xpath.Configroot'), '/updateProcessor/int', variable('Solr.Xpath.MaxFields.Selector'))]",
+        "Solr.MaxFieldsValue": 2000,
+        "Solr.ConnectionUser.Password": "[if(variable('Test.Solr.ConnectionUser.Password'),variable('Generate.Solr.ConnectionUser.Password'),parameter('SolrConnectionUserPassword'))]",
+        "Test.Solr.ConnectionUser.Password": "[equal(parameter('SolrConnectionUserPassword'),'')]",
+        "Generate.Solr.ConnectionUser.Password": "[randomstring(Length:20,DisAllowSpecial:True,EnforceComplexity:True)]",
+
+        "Solr.ConnectionUser.UserName": "[if(variable('Test.Solr.ConnectionUser.UserName'),parameter('CorePrefix'),parameter('SolrConnectionUserName'))]",
+        "Test.Solr.ConnectionUser.UserName": "[equal(parameter('SolrConnectionUserName'),'')]",
+        "Test.Solr.ConnectionUser.Exists.Command": "[concat('Add-Type -AssemblyName System.Web.Extensions;[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12;$user=\"', variable('Solr.ConnectionUser.UserName'), '\";try{$h=@{Authorization=\"', variable('Solr.Authorization'), '\"};$c=(Invoke-WebRequest -Uri \"', variable('Solr.Authentication.Uri'), '\" -Headers $h -UseBasicParsing).Content;$ser=New-Object System.Web.Script.Serialization.JavaScriptSerializer;$ser.MaxJsonLength=67108864;$d=$ser.DeserializeObject($c);$auth=if($d.ContainsKey(\"authentication\")){$d[\"authentication\"]}else{$d};$creds=$null;if(($null -ne $auth) -and $auth.ContainsKey(\"credentials\") -and ($null -ne $auth[\"credentials\"])){$creds=$auth[\"credentials\"]};if(($null -ne $creds) -and $creds.ContainsKey($user)){$true}else{$false}}catch{$false}')]",
+        "Test.Solr.ConnectionUser.Exists": "[InvokeExpression(Command:variable('Test.Solr.ConnectionUser.Exists.Command'))]",
+        "Solr.GeneralUser.Role": "sitecoreGeneralUserRole",
+
+        "Solr.Api.ContentType": "application/json",
+        "Solr.Authorization.Uri": "[concat(parameter('SolrUrl'), '/admin/authorization')]",
+        "Solr.Authentication.Uri": "[concat(parameter('SolrUrl'), '/admin/authentication')]",
+        
+        "Solr.HasCredentials": "[not(equal(parameter('SolrAdminUserName'), ''))]",
+        "Solr.Credentials": "[concat(parameter('SolrAdminUserName'), ':', parameter('SolrAdminPassword'))]",
+        "Solr.Credentials.Base64": "[InvokeExpression(Command:variable('Solr.Credentials.Base64.Command'))]",
+        "Solr.Credentials.Base64.Command": "[concat('[Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(\"', variable('Solr.Credentials'), '\"))')]",
+        "Solr.Authorization": "[if(variable('Solr.HasCredentials'), concat('Basic ', variable('Solr.Credentials.Base64')), '')]",
+
+        "Test.Solr.GeneralUser.PermissionsExist.Command": "[concat('Add-Type -AssemblyName System.Web.Extensions;[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12;$required=@(\"health\",\"update\",\"read\",\"schema-edit\",\"schema-read\",\"core-admin-read\",\"core-admin-edit\",\"sitecore_system_info\");$role=\"', variable('Solr.GeneralUser.Role'), '\";try{$h=@{Authorization=\"', variable('Solr.Authorization'), '\"};$c=(Invoke-WebRequest -Uri \"', variable('Solr.Authorization.Uri'), '\" -Headers $h -UseBasicParsing).Content;$ser=New-Object System.Web.Script.Serialization.JavaScriptSerializer;$ser.MaxJsonLength=67108864;$d=$ser.DeserializeObject($c);$auth=if($d.ContainsKey(\"authorization\")){$d[\"authorization\"]}else{$d};$p=@();if(($null -ne $auth) -and $auth.ContainsKey(\"permissions\") -and ($null -ne $auth[\"permissions\"])){foreach($perm in @($auth[\"permissions\"])){$p+=$perm}};$ok=$true;foreach($n in $required){$cnt=0;foreach($perm in $p){$r=$perm[\"role\"];$rm=($r -eq $role)-or(($null -ne $r)-and($r -isnot [string])-and($r -contains $role));if(($perm[\"name\"] -eq $n) -and $rm){$cnt++}};if($cnt -ne 1){$ok=$false;break}};$ok}catch{$false}')]",
+        "Test.Solr.GeneralUser.PermissionsExist": "[InvokeExpression(Command:variable('Test.Solr.GeneralUser.PermissionsExist.Command'))]",
+
+        "Core.Name":        "[concat(parameter('CorePrefix'), '_core_index')]",
+        "Master.Name":      "[concat(parameter('CorePrefix'), '_master_index')]",
+        "Web.Name":         "[concat(parameter('CorePrefix'), '_web_index')]",
+
+        "Core.Root":        "[joinpath(variable('Solr.Server'), variable('Core.Name'))]",
+        "Master.Root":      "[joinpath(variable('Solr.Server'), variable('Master.Name'))]",
+        "Web.Root":         "[joinpath(variable('Solr.Server'), variable('Web.Name'))]",
+
+        "Core.Conf":        "[joinpath(variable('Core.Root'), 'conf')]",
+        "Master.Conf":      "[joinpath(variable('Master.Root'), 'conf')]",
+        "Web.Conf":         "[joinpath(variable('Web.Root'), 'conf')]"
+    },
+    "Register": {
+        "Tasks": {
+            "WriteInformation": "Write-Information"
+        },
+        "ConfigFunction": {
+            "InvokeExpression": "Invoke-Expression"
+        }
+    },
+    "Tasks": {
+        "UnloadCores": {
+            "Description" : "Unloads existing Cores (if exists)",
+            "Type": "ManageSolrCore",
+            "Params": [
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Core.Name')]", "deleteInstanceDir": "true" }, "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "ErrorAction": "SilentlyContinue" },
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Master.Name')]", "deleteInstanceDir": "true" }, "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "ErrorAction": "SilentlyContinue" },
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Web.Name')]", "deleteInstanceDir": "true" }, "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "ErrorAction": "SilentlyContinue" }
+            ],
+            "Skip": "[parameter('Update')]"
+        },
+        "CleanCores": {
+            "Description" : "Creates/clears core paths.",
+            "Type": "EnsurePath",
+            "Params":{
+                "Clean": [
+                    "[variable('Core.Root')]",
+                    "[variable('Master.Root')]",
+                    "[variable('Web.Root')]"
+                ]
+            },
+            "Skip": "[parameter('Update')]"
+        },
+        "PrepareCores": {
+            "Description" : "Copies base configs into the core paths.",
+            "Type": "Copy",
+            "Params":[
+                { "Source": "[joinpath(variable('Solr.BaseConfigs'), '*')]", "Destination": "[variable('Core.Root')]" },
+                { "Source": "[joinpath(variable('Solr.BaseConfigs'), '*')]", "Destination": "[variable('Master.Root')]" },
+                { "Source": "[joinpath(variable('Solr.BaseConfigs'), '*')]", "Destination": "[variable('Web.Root')]" }
+            ],
+            "Skip": "[parameter('Update')]"
+        },
+        "AddSchemaUniqueKeyField": {
+            "Description" : "Amends the core managed schema uniqueKey element.",
+            "Type": "SetXml",
+            "Params": [
+                { "FilePath": "[joinpath(variable('Core.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.SchemaRoot')]", "Element": "field", "Attributes": "[variable('Solr.UniqueField.Attributes')]" },
+                { "FilePath": "[joinpath(variable('Master.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.SchemaRoot')]", "Element": "field", "Attributes": "[variable('Solr.UniqueField.Attributes')]" },
+                { "FilePath": "[joinpath(variable('Web.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.SchemaRoot')]", "Element": "field", "Attributes": "[variable('Solr.UniqueField.Attributes')]" }
+            ],
+            "Skip": "[parameter('Update')]"
+        },
+        "UpdateSchemaUniqueKey": {
+            "Description" : "Amends the core managed schema uniqueKey element.",
+            "Type": "SetXml",
+            "Params": [
+                { "FilePath": "[joinpath(variable('Core.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.UniqueKey')]", "Value": "[variable('Solr.UniqueField')]" },
+                { "FilePath": "[joinpath(variable('Master.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.UniqueKey')]", "Value": "[variable('Solr.UniqueField')]" },
+                { "FilePath": "[joinpath(variable('Web.Conf'), variable('Solr.SchemaFileName'))]", "Xpath":"[variable('Solr.Xpath.UniqueKey')]", "Value": "[variable('Solr.UniqueField')]" }
+            ],
+            "Skip": "[parameter('Update')]"
+        },
+        "UpdateMaxFieldsValue": {
+            "Description" : "Updates the core maxFields value.",
+            "Type": "SetXml",
+            "Params": [
+                { "FilePath": "[joinpath(variable('Core.Conf'), variable('Solr.ConfigFileName'))]", "Xpath":"[variable('Solr.Xpath.MaxFields')]", "Value": "[variable('Solr.MaxFieldsValue')]" },
+                { "FilePath": "[joinpath(variable('Master.Conf'), variable('Solr.ConfigFileName'))]", "Xpath":"[variable('Solr.Xpath.MaxFields')]", "Value": "[variable('Solr.MaxFieldsValue')]" },
+                { "FilePath": "[joinpath(variable('Web.Conf'), variable('Solr.ConfigFileName'))]", "Xpath":"[variable('Solr.Xpath.MaxFields')]", "Value": "[variable('Solr.MaxFieldsValue')]" }
+            ],
+            "Skip": "[parameter('Update')]"
+        },
+        "CreateCores":{
+            "Description" : "Tells Solr to create the new cores.",
+            "Type": "ManageSolrCore",
+            "Params": [
+                { "Action": "Create", "Address": "[parameter('SolrUrl')]", "Arguments": { "name": "[variable('Core.Name')]", "property.update.autoCreateFields": "false"}, "Headers": { "Authorization": "[variable('Solr.Authorization')]" } },
+                { "Action": "Create", "Address": "[parameter('SolrUrl')]", "Arguments": { "name": "[variable('Master.Name')]", "property.update.autoCreateFields": "false"}, "Headers": { "Authorization": "[variable('Solr.Authorization')]" } },
+                { "Action": "Create", "Address": "[parameter('SolrUrl')]", "Arguments": { "name": "[variable('Web.Name')]", "property.update.autoCreateFields": "false"}, "Headers": { "Authorization": "[variable('Solr.Authorization')]" } }
+            ],
+            "Skip": "[parameter('Update')]"
+        },
+        "CreateConnectionUser": {
+            "Description": "Creates a connection user for the Solr instance.",
+            "Type": "HttpRequest",
+            "Params": [
+                { "Uri": "[variable('Solr.Authentication.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-user": { "[variable('Solr.ConnectionUser.UserName')]": "[variable('Solr.ConnectionUser.Password')]" } } }
+            ],
+            "Skip": "[or(parameter('Update'), variable('Test.Solr.ConnectionUser.Exists'))]"
+        },
+        "CreateGeneralUserPermissions": {
+            "Description": "Assigns predefined permissions to the Sitecore general user role (user-managed Solr).",
+            "Type": "HttpRequest",
+            "Skip": "[or(parameter('Update'), variable('Test.Solr.GeneralUser.PermissionsExist'))]",
+            "Params": [
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-permission": { "name": "health", "role": "[variable('Solr.GeneralUser.Role')]", "before": 1 } } },
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-permission": { "name": "update", "role": "[variable('Solr.GeneralUser.Role')]", "before": 1 } } },
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-permission": { "name": "read", "role": "[variable('Solr.GeneralUser.Role')]", "before": 1 } } },
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-permission": { "name": "schema-edit", "role": "[variable('Solr.GeneralUser.Role')]", "before": 1 } } },
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-permission": { "name": "schema-read", "role": "[variable('Solr.GeneralUser.Role')]", "before": 1 } } },
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-permission": { "name": "core-admin-read", "role": "[variable('Solr.GeneralUser.Role')]", "before": 1 } } },
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-permission": { "name": "core-admin-edit", "role": "[variable('Solr.GeneralUser.Role')]", "before": 1 } } },
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-permission": { "name": "sitecore_system_info", "collection": null, "path": "/admin/info/system", "method": "GET", "role": "[variable('Solr.GeneralUser.Role')]", "before": 1 } } }
+            ]
+        },
+        "AssignUserToRole": {
+            "Description": "Assigns a user to a role.",
+            "Type": "HttpRequest",
+            "Params": [
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-user-role": { "[variable('Solr.ConnectionUser.UserName')]": "[variable('Solr.GeneralUser.Role')]" } } }
+            ],
+            "Skip": "[or(parameter('Update'), variable('Test.Solr.ConnectionUser.Exists'))]"
+        },
+        "DisplayPassword": {
+            "Description": "Displays the Solr connection user password.",
+            "Type": "WriteInformation",
+            "Params": {
+                "MessageData": "[concat('Solr Connection User Password: ',variable('Solr.ConnectionUser.Password'))]",
+                "InformationAction": "Continue"
+            },
+            "Skip": "[or(parameter('Update'), variable('Test.Solr.ConnectionUser.Exists'))]"
+        }
+    },
+    "UninstallTasks": {
+        "RemoveUserRole": {
+            "Description": "Removes a user from a role.",
+            "Type": "HttpRequest",
+            "Params": [
+                { "Uri": "[variable('Solr.Authorization.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "set-user-role": { "[variable('Solr.ConnectionUser.UserName')]": null } } }
+            ]
+        },
+        "DeleteUser": {
+            "Description": "Deletes the connection user for the Solr instance.",
+            "Type": "HttpRequest",
+            "Params": [
+                { "Uri": "[variable('Solr.Authentication.Uri')]", "ContentType": "[variable('Solr.Api.ContentType')]", "Action": "post", "Headers": { "Authorization": "[variable('Solr.Authorization')]" }, "Parameters": { "delete-user": "[variable('Solr.ConnectionUser.UserName')]" } }
+            ]
+        },
+        "RemoveCores": {
+            "Description": "Removes the cores and instance folders.",
+            "Type": "ManageSolrCore",
+            "Params": [
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Core.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue", "Headers": { "Authorization": "[variable('Solr.Authorization')]" } },
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Master.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue", "Headers": { "Authorization": "[variable('Solr.Authorization')]" } },
+                { "Action": "Unload", "Address": "[parameter('SolrUrl')]", "Arguments": { "core": "[variable('Web.Name')]", "deleteInstanceDir": "true" }, "ErrorAction": "SilentlyContinue", "Headers": { "Authorization": "[variable('Solr.Authorization')]" } }
+            ]
+        }
+    }
+}

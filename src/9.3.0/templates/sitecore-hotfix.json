@@ -1,0 +1,203 @@
+{
+    "Parameters": {
+        "Package": {
+            "Type": "string",
+            "Description": "The path to the hotfix zip that contains the update package (.update) to install.",
+            "DefaultValue": ""
+        },
+        "SqlDbPrefix": {
+            "Type": "string",
+            "Description": "The prefix used for all Sql databases.",
+            "DefaultValue": ""
+        },
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "SitecoreAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "b",
+            "Description": "The admin password for the Sitecore instance."
+        },
+        "SqlAdminUser": {
+            "Type": "string",
+            "DefaultValue": "sa",
+            "Description": "The Sql admin user account to use when installing databases."
+        },
+        "SqlAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "12345",
+            "Description": "The Sql admin password to use when installing databases."
+        },
+        "SqlServer": {
+            "Type": "string",
+            "DefaultValue": ".\\SQLSERVER",
+            "Description": "The Sql Server where databases will be installed."
+        },
+        "SqlTrustServerCertificate": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "Trust server certificate for SQL connection"
+        },
+        "FilesDirectory": {
+            "Type": "string",
+            "DefaultValue": ".\\templates\\files",
+            "Description": "The path of the folder that contains the files this configuration uses."
+        }
+    },
+    "Register": {
+        "Tasks": {
+            "InvokeSqlcmd": "Invoke-Sqlcmd",
+            "RemoveItem": "Remove-Item"
+        }
+    },
+    "Variables": {
+        "Files.Directory": "[resolvepath(parameter('FilesDirectory'))]",
+        "Sql.Database.Master": "[concat(parameter('SqlDbPrefix'), '_Master')]",
+        "Sql.TrustServerCertificate": "[equal(parameter('SqlTrustServerCertificate'), 'true')]",
+        "Site.PhysicalPath": "[joinpath(environment('SystemDrive'), 'inetpub', 'wwwroot', parameter('SiteName'))]",
+        "Package.Extract": "[joinpath(environment('TEMP'), concat(parameter('SiteName'), '.hotfix'))]",
+        "Package.UpdateFile": "[joinpath(variable('Package.Extract'), '*', '*.update')]",
+        "Package.StagedName": "hotfix.update",
+        "Package.StagedPath": "[joinpath(variable('Site.PhysicalPath'), 'App_Data', 'packages', variable('Package.StagedName'))]",
+        "CreateFilteredIndexSql.File": "[joinpath(variable('Package.Extract'), '*', 'CreateFilteredIndex.sql')]",
+        "CreateFilteredIndexSql.StagedPath": "[joinpath(variable('Package.Extract'), 'CreateFilteredIndex.sql')]"
+    },
+    "Modules": [
+        ".\\templates\\sitecore-hotfix.psm1"
+    ],
+    "Tasks": {
+        "CleanExtractLocation": {
+            "Description": "Creates (or empties) the temp folder the hotfix zip is extracted to.",
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Package.Extract')]" ]
+            }
+        },
+        "ExtractHotfix": {
+            "Description": "Extracts the hotfix zip.",
+            "Type": "Unpack",
+            "Params": {
+                "Source": "[resolvepath(parameter('Package'))]",
+                "Destination": "[variable('Package.Extract')]"
+            }
+        },
+        "CopyUpdatePackage": {
+            "Description": "Stages the update package from the hotfix zip in App_Data\\packages.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[variable('Package.UpdateFile')]",
+                "Destination": "[variable('Package.StagedPath')]"
+            }
+        },
+        "CopyCreateFilteredIndexSql": {
+            "Description": "Stages the CreateFilteredIndex.sql script from the hotfix zip.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[variable('CreateFilteredIndexSql.File')]",
+                "Destination": "[variable('CreateFilteredIndexSql.StagedPath')]"
+            }
+        },
+        "CopyInstallUpdatePackagePage": {
+            "Description": "Copies the InstallUpdatePackage admin page to the website.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Files.Directory'), 'InstallUpdatePackage.aspx')]",
+                "Destination": "[joinpath(variable('Site.PhysicalPath'), 'sitecore', 'admin')]"
+            }
+        },
+        "InstallUpdatePackage": {
+            "Description": "Installs the update package.",
+            "Type": "SitecoreUrl",
+            "Params": {
+                "SitecoreInstanceRoot": "[concat('https://', parameter('SiteName'))]",
+                "SitecoreActionPath": "[concat('sitecore/admin/InstallUpdatePackage.aspx?package=', variable('Package.StagedName'))]",
+                "UserName": "admin",
+                "Password": "[parameter('SitecoreAdminPassword')]"
+            }
+        },
+        "InstallCveAssemblies": {
+            "Description": "Installs the CVE-updated NuGet assemblies.",
+            "Type": "InstallNuGetAssemblies",
+            "Params": {
+                "Packages": [
+                    "Microsoft.Owin/4.2.2/net45",
+                    "Microsoft.Owin.Security/4.2.2/net45",
+                    "Microsoft.Owin.Security.ActiveDirectory/4.2.2/net45",
+                    "Microsoft.Owin.Security.Cookies/4.2.2/net45",
+                    "Microsoft.Owin.Security.Jwt/4.2.2/net45",
+                    "Microsoft.Owin.Security.OAuth/4.2.2/net45",
+                    "Microsoft.Owin.Security.OpenIdConnect/4.2.2/net45",
+                    "Microsoft.IdentityModel.JsonWebTokens/5.7.0/net461",
+                    "Microsoft.IdentityModel.Logging/5.7.0/net461",
+                    "Microsoft.IdentityModel.Protocols/5.7.0/net461",
+                    "Microsoft.IdentityModel.Protocols.OpenIdConnect/5.7.0/net461",
+                    "Microsoft.IdentityModel.Protocols.WsFederation/5.7.0/net461",
+                    "Microsoft.IdentityModel.Tokens/5.7.0/net461",
+                    "Microsoft.IdentityModel.Tokens.Saml/5.7.0/net461",
+                    "Microsoft.IdentityModel.Xml/5.7.0/net461",
+                    "System.IdentityModel.Tokens.Jwt/5.7.0/net461",
+                    "Microsoft.AspNet.Identity.Core/2.2.4/net45",
+                    "Microsoft.AspNet.Identity.Owin/2.2.4/net45",
+                    "System.Security.Cryptography.Xml/4.7.1/net461",
+                    "System.Security.Permissions/4.7.0/net461",
+                    "Newtonsoft.Json/13.0.1/net45"
+                ],
+                "Destination": "[joinpath(variable('Site.PhysicalPath'), 'bin')]"
+            }
+        },
+        "UpdateBindingRedirects": {
+            "Description": "Updates web.config binding redirects",
+            "Type": "UpdateBindingRedirects",
+            "Params": {
+                "SitePath": "[variable('Site.PhysicalPath')]"
+            }
+        },
+        "CopyPatchFiles": {
+            "Description": "Copies the cumulative hotfix instruction patch files into the website.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Files.Directory'), 'sc-hotfix-pdxp-7469-1', '*')]",
+                "Destination": "[variable('Site.PhysicalPath')]"
+            }
+        },
+        "RunCreateFilteredIndexSql": {
+            "Description": "Runs the CreateFilteredIndex.sql script against the master database.",
+            "Type": "InvokeSqlcmd",
+            "Params": {
+                "ServerInstance": "[parameter('SqlServer')]",
+                "Username": "[parameter('SqlAdminUser')]",
+                "Password": "[parameter('SqlAdminPassword')]",
+                "Database": "[variable('Sql.Database.Master')]",
+                "InputFile": "[variable('CreateFilteredIndexSql.StagedPath')]",
+                "TrustServerCertificate": "[variable('Sql.TrustServerCertificate')]"
+            }
+        },
+        "RemoveUpdatePackage": {
+            "Description": "Removes the staged update package from App_Data\\packages.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[variable('Package.StagedPath')]",
+                "Force": true
+            }
+        },
+        "RemoveInstallUpdatePackagePage": {
+            "Description": "Removes the InstallUpdatePackage admin page from the website.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[joinpath(variable('Site.PhysicalPath'), 'sitecore', 'admin', 'InstallUpdatePackage.aspx')]",
+                "Force": true
+            }
+        },
+        "CleanupExtractLocation": {
+            "Description": "Cleans up the extraction temp folder after installation.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[variable('Package.Extract')]",
+                "Recurse": true,
+                "Force": true
+            }
+        }
+    }
+}

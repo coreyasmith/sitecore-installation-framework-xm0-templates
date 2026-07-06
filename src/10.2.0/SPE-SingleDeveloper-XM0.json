@@ -1,0 +1,69 @@
+{
+    "Parameters": {
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed to."
+        },
+        "Prefix": {
+            "Type": "String",
+            "Description": "The prefix for the Solr, SQL and Sitecore instances.",
+            "DefaultValue": ""
+        },
+        "SqlAdminUser": {
+            "Type": "string",
+            "DefaultValue": "sa",
+            "Description": "The Sql admin user account to use when installing databases."
+        },
+        "SqlAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "12345",
+            "Description": "The Sql admin password to use when installing databases."
+        },
+        "SQLServer": {
+            "Type": "String",
+            "DefaultValue": "Localhost",
+            "Description": "The Sql Server where databases will be installed."
+        },
+        "SPEPackage": {
+            "Type": "String",
+            "DefaultValue": "",
+            "Description": "The path to the Sitecore Powershell Extensions package to deploy."
+        },
+        "SPE:SiteName": {
+            "Type": "String",
+            "Reference": "SiteName",
+            "Description": "Override to pass SiteName value to SPE config."
+        },
+        "SPE:Package": {
+            "Type": "String",
+            "Reference": "SPEPackage",
+            "Description": "Override to pass SPEPackage value to SPE config."
+        },
+        "SPE:SQLServer": {
+            "Type": "String",
+            "Reference": "SQLServer",
+            "Description": "Override to pass SQLServer value to SPE config."
+        },
+        "SPE:SqlAdminPassword": {
+            "Type": "String",
+            "Reference": "SqlAdminPassword",
+            "Description": "Override to pass SqlAdminPassword value to SPE config."
+        },
+        "SPE:SqlAdminUser": {
+            "Type": "String",
+            "Reference": "SqlAdminUser",
+            "Description": "Override to pass SqlAdminUser value to SPE config."
+        },
+        "SPE:SqlDbPrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to SPE config."
+        }
+    },
+    "Includes": {
+        "SPE":{
+            "Source": ".\\templates\\spe.json"
+        }
+    }
+}

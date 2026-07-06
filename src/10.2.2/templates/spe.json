@@ -1,0 +1,135 @@
+﻿{
+    "Parameters": {
+        "Package": {
+            "Type": "string",
+            "Description": "The path to the Web Deploy package to deploy.",
+            "DefaultValue": ""
+        },
+        "SqlDbPrefix": {
+            "Type": "string",
+            "Description": "The prefix used for all Sql databases.",
+            "DefaultValue": ""
+        },
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "SqlAdminUser": {
+            "Type": "string",
+            "DefaultValue": "sa",
+            "Description": "The Sql admin user account to use when installing databases."
+        },
+        "SqlAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "12345",
+            "Description": "The Sql admin password to use when installing databases."
+        },
+        "SqlServer": {
+            "Type": "string",
+            "DefaultValue": ".\\SQLSERVER",
+            "Description": "The Sql Server where databases will be installed."
+        },
+        "PackagesTempLocation": {
+            "Type": "String",
+            "Description": "Alternative location to save WDP packages. If left on the default $Env:Temp will be used.",
+            "DefaultValue": "",
+            "Validate": "[TestPath(variable('Temp.Location'))]"
+        },
+        "DownloadLocations": {
+            "Type": "String",
+            "Description": "File with URI and SHA256 hashes of dynamically downloadable WDPs.",
+            "DefaultValue": ".\\downloads.json"
+        }
+    },
+    "Register": {
+        "ConfigFunction": {
+            "TestPath": "Test-Path",
+            "SelectObject": "Select-Object",
+            "SplitPath": "Split-Path"
+        }
+    },
+    "Variables": {
+        "Sql.Database.Core": "[concat(parameter('SqlDbPrefix'), '_Core')]",
+        "Sql.Database.Master": "[concat(parameter('SqlDbPrefix'), '_Master')]",
+        "SXA.DB.Core": "[SqlConnectionString(Server:parameter('SqlServer'),Database:variable('Sql.Database.Core'),UserName:parameter('SqlAdminUser'),Password:parameter('SqlAdminPassword'))]",
+        "Temp.Location" : "[if(variable('Test.Temp.Location'),Environment('Temp'),parameter('PackagesTempLocation'))]",
+        "Test.Temp.Location" : "[equal(parameter('PackagesTempLocation'),'')]",
+        "Settings.FileName": "spe.json",
+        "Dynamic.WDP": "[ReadJson(parameter('DownloadLocations'))]",
+        "Test.WDP.Download": "[TestPath(Path:Parameter('DownloadLocations'))]",
+        "WDP.Download": "[SelectObject(InputObject:variable('Dynamic.WDP'),ExpandProperty:variable('Settings.Filename'))]",
+        "WDP.Download.Uri": "[SelectObject(InputObject:variable('WDP.Download'),ExpandProperty:'Uri')]",
+        "WDP.Download.Hash": "[SelectObject(InputObject:variable('WDP.Download'),ExpandProperty:'Hash')]",
+        "WDP.Download.Path": "[JoinPath(variable('Temp.Location'),variable('WDP.Filename'))]",
+        "WDP.Download.Filename": "[SplitPath(Path:variable('WDP.Download.Uri'),Leaf:true)]",
+        "WDP.Filename": "[Split(String:variable('WDP.Download.Filename'),Characters:'?')]",
+        "Package": "[if(parameter('Package'),parameter('Package'),variable('WDP.Download.Path'))]",
+        "Test.Packaging": "[or(variable('Test.Null.Package'),not(variable('Test.WDP.Download')))]",
+        "Test.Null.Package": "[if(parameter('Package'),parameter('Package'),'')]"
+    },
+    "Tasks": {
+        "DownloadWDP": {
+            "Description": "Download the WDP and verifies it against the stored hash.",
+            "Type": "DownloadFile",
+            "Params": {
+                "SourceUri": "[variable('WDP.Download.URI')]",
+                "DestinationPath": "[variable('WDP.Download.Path')]",
+                "Hash": "[variable('WDP.Download.Hash')]"
+            },
+            "Skip" : "[variable('Test.Packaging')]"
+        },
+        "StopWebsite": {
+            "Description": "Stops the website if it is running.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop"
+            }
+        },
+        "StopAppPool": {
+            "Description": "Stops the app pool if it is running.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop",
+                "Timeout": 60
+            }
+        },
+        "InstallWDP": {
+            "Description": "Syncs the web deploy package with the website.",
+            "Type": "WebDeploy",
+            "Params": {
+                "Verb": "Sync",
+                "Arguments": {
+                    "Source": {
+                        "Package": "[resolvepath(variable('Package'))]"
+                    },
+                    "Dest": "Auto",
+                    "enableRule": "DoNotDeleteRule",
+                    "SetParam": [
+                        { "Name": "Application Path", "Value": "[parameter('SiteName')]" },
+                        { "Name": "Core Admin Connection String", "Value": "[variable('SXA.DB.Core')]" }
+                    ]
+                }
+            }
+        },
+        "StartAppPool": {
+            "Description": "Starts the app pool.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start",
+                "Timeout": 60
+            }
+        },
+        "StartWebsite": {
+            "Description": "Starts the website.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start"
+            }
+        }
+    }
+}

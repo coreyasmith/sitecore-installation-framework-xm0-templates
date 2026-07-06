@@ -1,0 +1,100 @@
+{
+    "Parameters": {
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "FilesDirectory": {
+            "Type": "string",
+            "DefaultValue": ".\\templates\\files",
+            "Description": "The path of the folder that contains the files this configuration uses."
+        }
+    },
+    "Variables": {
+        "Site.PhysicalPath": "[joinpath(environment('SystemDrive'), 'inetpub', 'wwwroot', parameter('SiteName'))]",
+        "Files.Directory": "[resolvepath(parameter('FilesDirectory'))]",
+        "Examples.Directory": "[joinpath(variable('Site.PhysicalPath'), 'App_Config', 'Include', 'Examples')]"
+    },
+    "Tasks": {
+        "StopWebsite": {
+            "Description": "Stops the website if it is running.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop"
+            }
+        },
+        "StopAppPool": {
+            "Description": "Stops the app pool if it is running.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop"
+            }
+        },
+        "UpdateBindingRedirects": {
+            "Description": "Updates web.config binding redirects",
+            "Type": "UpdateBindingRedirects",
+            "Params": {
+                "SitePath": "[variable('Site.PhysicalPath')]"
+            }
+        },
+        "AddContentSecurityPolicyHeader": {
+            "Description": "Updates the Content-Security-Policy header.",
+            "Type": "TransformXmlDoc",
+            "Params": {
+                "RootDirectoryPath": "[variable('Site.PhysicalPath')]",
+                "XdtDirectory": "[joinpath(variable('Files.Directory'), '10.1.4-rev-013779', 'xdts')]"
+            }
+        },
+        "CopyPatchFiles": {
+            "Description": "Copies the cumulative update instruction patch files into the website.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Files.Directory'), '10.1.4-rev-013779', 'files', '*')]",
+                "Destination": "[variable('Site.PhysicalPath')]"
+            }
+        },
+        "EnableSanitizeMedia": {
+            "Description": "Enables XSS sanitization during media rendering.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Examples.Directory'), 'Sitecore.Media.SanitizeMedia.config.example')]",
+                "Destination": "[joinpath(variable('Examples.Directory'), 'Sitecore.Media.SanitizeMedia.config')]"
+            }
+        },
+        "EnableValidateSecurityStamp": {
+            "Description": "Enables security stamp validation.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Examples.Directory'), 'Sitecore.Owin.Authentication.ValidateSecurityStamp.config.example')]",
+                "Destination": "[joinpath(variable('Examples.Directory'), 'Sitecore.Owin.Authentication.ValidateSecurityStamp.config')]"
+            }
+        },
+        "EnableRespectPreviewContext": {
+            "Description": "Enables the RespectPreviewContext configuration.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Examples.Directory'), 'Sitecore.Owin.Authentication.RespectPreviewContext.config.example')]",
+                "Destination": "[joinpath(variable('Examples.Directory'), 'Sitecore.Owin.Authentication.RespectPreviewContext.config')]"
+            }
+        },
+        "StartAppPool": {
+            "Description": "Starts the app pool.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start"
+            }
+        },
+        "StartWebsite": {
+            "Description": "Starts the website.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start"
+            }
+        }
+    }
+}

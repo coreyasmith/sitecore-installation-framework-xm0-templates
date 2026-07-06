@@ -1,0 +1,56 @@
+{
+    "Parameters": {
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "SitecoreAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "b",
+            "Description": "The admin password for the Sitecore instance."
+        },
+        "FilesDirectory": {
+            "Type": "string",
+            "DefaultValue": ".\\templates\\files",
+            "Description": "The path of the folder that contains the files this configuration uses."
+        }
+    },
+    "Register": {
+        "Tasks": {
+            "RemoveItem": "Remove-Item"
+        }
+    },
+    "Variables": {
+        "Files.Directory": "[resolvepath(parameter('FilesDirectory'))]",
+        "Site.PhysicalPath": "[joinpath(environment('SystemDrive'), 'inetpub', 'wwwroot', parameter('SiteName'))]"
+    },
+    "Tasks": {
+        "CopyRunPostStepsPage": {
+            "Description": "Copies the RunPostSteps admin page to the website.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Files.Directory'), 'RunPostSteps.aspx')]",
+                "Destination": "[joinpath(variable('Site.PhysicalPath'), 'sitecore', 'admin')]"
+            }
+        },
+        "RunPostSteps": {
+            "Description": "Runs the SPE package post step.",
+            "Type": "SitecoreUrl",
+            "Params": {
+                "SitecoreInstanceRoot": "[concat('https://', parameter('SiteName'))]",
+                "SitecoreActionPath": "sitecore/admin/RunPostSteps.aspx?poststeps=Sitecore_PowerShell_Extensions&Sitecore_PowerShell_Extensions.attributes=scriptId={737CD0CC-12F7-4528-8FBD-E0FDEFC41325}",
+                "UserName": "admin",
+                "Password": "[parameter('SitecoreAdminPassword')]"
+            }
+        },
+        "RemoveRunPostStepsPage": {
+            "Description": "Removes the RunPostSteps admin page from the website.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[joinpath(variable('Site.PhysicalPath'), 'sitecore', 'admin', 'RunPostSteps.aspx')]",
+                "Force": true
+            }
+        }
+    }
+}

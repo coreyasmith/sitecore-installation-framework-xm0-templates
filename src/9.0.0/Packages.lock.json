@@ -1,0 +1,50 @@
+{
+    "Version": "9.0.0",
+    "Packages": [
+        {
+            "Name": "license.xml",
+            "Length": null,
+            "Sha256": null
+        },
+        {
+            "Name": "Sitecore 9.0.0 rev. 171002 (OnPrem)_cm.scwdp.zip",
+            "Length": 256996700,
+            "Sha256": "229E05C55A4EFC6CB3C5A1F1864EAC500E6FC65BDA1162C090FFC84E9828899A"
+        },
+        {
+            "Name": "Sitecore Experience Accelerator 1.5 rev. 171010 for 9.0.scwdp.zip",
+            "Length": 13460531,
+            "Sha256": "1A1ED0CC6991A6AB14E12E4BE119A3B6CF0ECE21061ACEB280EF7F19B0B451DD"
+        },
+        {
+            "Name": "Sitecore JavaScript Services Tech Preview Server 9.0 rev. 171013.zip",
+            "Length": 555492,
+            "Sha256": "B85D7DA2AB7C7EDADF3FA3BF122723547AE7C865DA3218F33F6808781FA7335D"
+        },
+        {
+            "Name": "Sitecore JavaScript Services Tech Preview Infrastructure 9.0 rev. 171013.zip",
+            "Length": 48930,
+            "Sha256": "F0E2B80D5B5088E30A7D9DCD2B7F95B62C194A25A1FE2D72436F73196C832764"
+        },
+        {
+            "Name": "Sitecore.PowerShell.Extensions-8.0.scwdp.zip",
+            "Length": 1827432,
+            "Sha256": "A5EF5730751C325AA21F69081DF8F50A8E18E4BCE5A2F41ABE0134E23352314C"
+        },
+        {
+            "Name": "SC Hotfix 589744-1 for 9.0.0.zip",
+            "Length": 3460311,
+            "Sha256": "40D9E4EFE7174AFBF1FE7E8C487E61996CF19DBAFB378B2B23AD2E8E0F54C3F6"
+        },
+        {
+            "Name": "Sitecore.Support.PDXP-9109.zip",
+            "Length": 6105,
+            "Sha256": "E90F7E5F98497A62882ADA0F9B857EA9697DD4776534EEFEE96BD93D664CE240"
+        },
+        {
+            "Name": "Sitecore.Support.9.0-9.3.zip",
+            "Length": 13021,
+            "Sha256": "A6D75A69537B6AA3DD3115A8018507DACE0AABEE4913B8C6002B1BF382AAA165"
+        }
+    ]
+}

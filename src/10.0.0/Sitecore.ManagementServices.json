@@ -1,0 +1,65 @@
+﻿{
+    "Parameters": {
+        "Package": {
+            "Type": "string",
+            "Description": "The path to the Web Deploy package to deploy.",
+            "DefaultValue": ""
+        },
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        }
+    },
+    "Tasks": {
+        "StopWebsite": {
+            "Description": "Stops the website if it is running.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop"
+            }
+        },
+        "StopAppPool": {
+            "Description": "Stops the app pool if it is running.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop"
+            }
+        },
+        "InstallWDP": {
+            "Description": "Syncs the web deploy package with the website.",
+            "Type": "WebDeploy",
+            "Params": {
+                "Verb": "Sync",
+                "Arguments": {
+                    "Source": {
+                        "Package": "[resolvepath(parameter('Package'))]"
+                    },
+                    "Dest": "Auto",
+                    "enableRule": "DoNotDeleteRule",
+                    "SetParam": [
+                        { "Name": "Application Path", "Value": "[parameter('SiteName')]" }
+                    ]
+                }
+            }
+        },
+        "StartAppPool": {
+            "Description": "Starts the app pool.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start"
+            }
+        },
+        "StartWebsite": {
+            "Description": "Starts the website.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start"
+            }
+        }
+    }
+}

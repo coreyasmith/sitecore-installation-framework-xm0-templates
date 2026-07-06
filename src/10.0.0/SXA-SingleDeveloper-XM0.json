@@ -1,0 +1,173 @@
+{
+    "Parameters": {
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed to."
+        },
+        "Prefix": {
+            "Type": "String",
+            "Description": "The prefix for the Solr, SQL and Sitecore instances.",
+            "DefaultValue": ""
+        },
+        "SitecoreAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "SIF-Default",
+            "Description": "The admin password for the Sitecore instance."
+        },
+        "SqlAdminUser": {
+            "Type": "string",
+            "DefaultValue": "sa",
+            "Description": "The Sql admin user account to use when installing databases."
+        },
+        "SqlAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "12345",
+            "Description": "The Sql admin password to use when installing databases."
+        },
+        "SQLServer": {
+            "Type": "String",
+            "DefaultValue": "Localhost",
+            "Description": "The Sql Server where databases will be installed."
+        },
+        "SolrUrl": {
+            "Type": "String",
+            "DefaultValue": "https://localhost:8983/solr",
+            "Description": "The Solr instance to use."
+        },
+        "SolrRoot": {
+            "Type": "String",
+            "DefaultValue": "C:\\solr-7.5.0",
+            "Description": "The file path to the Solr instance."
+        },
+        "SolrService": {
+            "Type": "String",
+            "DefaultValue": "Solr-7.5.0",
+            "Description": "The name of the Solr service."
+        },
+        "SXAPackage": {
+            "Type": "String",
+            "DefaultValue": "",
+            "Description": "The path to the Sitecore Experience Accelerator package to deploy."
+        },
+        "SPEPackage": {
+            "Type": "String",
+            "DefaultValue": "",
+            "Description": "The path to the Sitecore Powershell Extensions package to deploy."
+        },
+        "SXA:SiteName": {
+            "Type": "String",
+            "Reference": "SiteName",
+            "Description": "Override to pass SiteName value to SXA config."
+        },
+        "SPE:SiteName": {
+            "Type": "String",
+            "Reference": "SiteName",
+            "Description": "Override to pass SiteName value to SPE config."
+        },
+        "SXA:Package": {
+            "Type": "String",
+            "Reference": "SXAPackage",
+            "Description": "Override to pass SXAPackage value to SXA config."
+        },
+        "SPE:Package": {
+            "Type": "String",
+            "Reference": "SPEPackage",
+            "Description": "Override to pass SPEPackage value to SPE config."
+        },
+        "SPE:SQLServer": {
+            "Type": "String",
+            "Reference": "SQLServer",
+            "Description": "Override to pass SQLServer value to SPE config."
+        },
+        "SXA:SQLServer": {
+            "Type": "String",
+            "Reference": "SQLServer",
+            "Description": "Override to pass SQLServer value to SXA config."
+        },
+        "SXA:SqlAdminPassword": {
+            "Type": "String",
+            "Reference": "SqlAdminPassword",
+            "Description": "Override to pass SqlAdminPassword value to SXA config."
+        },
+        "SPE:SqlAdminPassword": {
+            "Type": "String",
+            "Reference": "SqlAdminPassword",
+            "Description": "Override to pass SqlAdminPassword value to SPE config."
+        },
+        "SXA:SqlAdminUser": {
+            "Type": "String",
+            "Reference": "SqlAdminUser",
+            "Description": "Override to pass SqlAdminUser value to SXA config."
+        },
+        "SPE:SqlAdminUser": {
+            "Type": "String",
+            "Reference": "SqlAdminUser",
+            "Description": "Override to pass SqlAdminUser value to SPE config."
+        },
+        "SXA:SqlDbPrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to SXA config."
+        },
+        "SPE:SqlDbPrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to SPE config."
+        },
+        "SXA:SolrCorePrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to SXA config."
+        },
+        "SXA:SitecoreAdminPassword": {
+            "Type": "String",
+            "Reference": "SitecoreAdminPassword",
+            "Description": "Override to pass SitecoreAdminPassword value to SXA config."
+        },
+        "SPEPostSteps:SiteName": {
+            "Type": "String",
+            "Reference": "SiteName",
+            "Description": "Override to pass SiteName value to SPE post steps config."
+        },
+        "SPEPostSteps:SitecoreAdminPassword": {
+            "Type": "String",
+            "Reference": "SitecoreAdminPassword",
+            "Description": "Override to pass SitecoreAdminPassword value to SPE post steps config."
+        },
+        "Solr:CorePrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to Solr config."
+        },
+        "Solr:SolrUrl": {
+            "Type": "String",
+            "Reference": "SolrUrl",
+            "Description": "Override to pass SolrUrl to Solr config."
+        },
+        "Solr:SolrService": {
+            "Type": "String",
+            "Reference": "SolrService",
+            "Description": "Override to pass SolrService to Solr config."
+        },
+        "Solr:SolrRoot": {
+            "Type": "String",
+            "Reference": "SolrRoot",
+            "Description": "Override to pass SolrRoot to Solr config."
+        }
+    },
+    "Includes": {
+        "SPE":{
+            "Source": ".\\templates\\spe.json"
+        },
+        "Solr": {
+            "Source": ".\\templates\\sxa-solr.json"
+        },
+        "SXA": {
+            "Source": ".\\templates\\sxa-XM0.json"
+        },
+        "SPEPostSteps": {
+            "Source": ".\\templates\\spe-poststeps.json"
+        }
+    }
+}

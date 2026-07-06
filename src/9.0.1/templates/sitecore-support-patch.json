@@ -1,0 +1,81 @@
+{
+    "Parameters": {
+        "Package": {
+            "Type": "string",
+            "Description": "The path to the Sitecore.Support patch zip to apply.",
+            "DefaultValue": ""
+        },
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "IsWrapper": {
+            "Type": "bool",
+            "DefaultValue": true,
+            "Description": "Whether the patch zip nests its folders inside a single wrapper folder."
+        },
+        "ExcludeFilter": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "A wildcard to exclude files from the support patch."
+        }
+    },
+    "Register": {
+        "Tasks": {
+            "RemoveItem": "Remove-Item"
+        }
+    },
+    "Variables": {
+        "Site.PhysicalPath": "[joinpath(environment('SystemDrive'), 'inetpub', 'wwwroot', parameter('SiteName'))]",
+        "Package.Extract": "[joinpath(environment('TEMP'), concat(parameter('SiteName'), '.support-patch'))]",
+        "Package.Contents": "[joinpath(variable('Package.Extract'), '*')]",
+        "Package.Payload": "[if(parameter('IsWrapper'), joinpath(variable('Package.Extract'), '*', '*'), variable('Package.Contents'))]"
+    },
+    "Tasks": {
+        "CleanExtractLocation": {
+            "Description": "Creates (or empties) the temp folder the patch zip is extracted to.",
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Package.Extract')]" ]
+            }
+        },
+        "ExtractPatch": {
+            "Description": "Extracts the patch zip.",
+            "Type": "Unpack",
+            "Params": {
+                "Source": "[resolvepath(parameter('Package'))]",
+                "Destination": "[variable('Package.Extract')]"
+            }
+        },
+        "RemovePatchReadme": {
+            "Description": "Removes the README from the support patch.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[variable('Package.Contents')]",
+                "Include": "*.md",
+                "Recurse": true,
+                "Force": true
+            }
+        },
+        "RemoveExcludedFiles": {
+            "Description": "Removes the excluded files from the extracted patch.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[variable('Package.Contents')]",
+                "Include": "[parameter('ExcludeFilter')]",
+                "Recurse": true,
+                "Force": true
+            },
+            "Skip": "[not(parameter('ExcludeFilter'))]"
+        },
+        "InstallPatch": {
+            "Description": "Copies the patch folders into the website root.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[variable('Package.Payload')]",
+                "Destination": "[variable('Site.PhysicalPath')]"
+            }
+        }
+    }
+}

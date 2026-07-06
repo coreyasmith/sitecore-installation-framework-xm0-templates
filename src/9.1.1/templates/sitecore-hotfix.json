@@ -1,0 +1,116 @@
+{
+    "Parameters": {
+        "Package": {
+            "Type": "string",
+            "Description": "The path to the hotfix zip that contains the update package (.update) to install.",
+            "DefaultValue": ""
+        },
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "SitecoreAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "b",
+            "Description": "The admin password for the Sitecore instance."
+        },
+        "FilesDirectory": {
+            "Type": "string",
+            "DefaultValue": ".\\templates\\files",
+            "Description": "The path of the folder that contains the files this configuration uses."
+        }
+    },
+    "Register": {
+        "Tasks": {
+            "RemoveItem": "Remove-Item"
+        },
+        "ConfigFunction": {
+            "TestPath": "Test-Path"
+        }
+    },
+    "Variables": {
+        "Files.Directory": "[resolvepath(parameter('FilesDirectory'))]",
+        "Site.PhysicalPath": "[joinpath(environment('SystemDrive'), 'inetpub', 'wwwroot', parameter('SiteName'))]",
+        "Package.Extract": "[joinpath(environment('TEMP'), concat(parameter('SiteName'), '.hotfix'))]",
+        "Package.UpdateFile": "[joinpath(variable('Package.Extract'), '*.update')]",
+        "Package.StagedName": "hotfix.update",
+        "Package.StagedPath": "[joinpath(variable('Site.PhysicalPath'), 'App_Data', 'packages', variable('Package.StagedName'))]"
+    },
+    "Tasks": {
+        "CleanExtractLocation": {
+            "Description": "Creates (or empties) the temp folder the hotfix zip is extracted to.",
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Package.Extract')]" ]
+            }
+        },
+        "ExtractHotfix": {
+            "Description": "Extracts the hotfix zip.",
+            "Type": "Unpack",
+            "Params": {
+                "Source": "[resolvepath(parameter('Package'))]",
+                "Destination": "[variable('Package.Extract')]"
+            }
+        },
+        "CopyUpdatePackage": {
+            "Description": "Stages the update package from the hotfix zip in App_Data\\packages.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[variable('Package.UpdateFile')]",
+                "Destination": "[variable('Package.StagedPath')]"
+            }
+        },
+        "CopyInstallUpdatePackagePage": {
+            "Description": "Copies the InstallUpdatePackage admin page to the website.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Files.Directory'), 'InstallUpdatePackage.aspx')]",
+                "Destination": "[joinpath(variable('Site.PhysicalPath'), 'sitecore', 'admin')]"
+            }
+        },
+        "InstallUpdatePackage": {
+            "Description": "Installs the update package.",
+            "Type": "SitecoreUrl",
+            "Params": {
+                "SitecoreInstanceRoot": "[concat('https://', parameter('SiteName'))]",
+                "SitecoreActionPath": "[concat('sitecore/admin/InstallUpdatePackage.aspx?package=', variable('Package.StagedName'))]",
+                "UserName": "admin",
+                "Password": "[parameter('SitecoreAdminPassword')]"
+            }
+        },
+        "CopyExperienceEditorConfig": {
+            "Description": "Copies the Experience Editor configuration file from the hotfix zip.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(variable('Package.Extract'), 'Sitecore.ExperienceEditor.config')]",
+                "Destination": "[joinpath(variable('Site.PhysicalPath'), 'App_Config', 'Sitecore', 'Experience Editor')]"
+            }
+        },
+        "RemoveUpdatePackage": {
+            "Description": "Removes the staged update package from App_Data\\packages.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[variable('Package.StagedPath')]",
+                "Force": true
+            }
+        },
+        "RemoveInstallUpdatePackagePage": {
+            "Description": "Removes the InstallUpdatePackage admin page from the website.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[joinpath(variable('Site.PhysicalPath'), 'sitecore', 'admin', 'InstallUpdatePackage.aspx')]",
+                "Force": true
+            }
+        },
+        "CleanupExtractLocation": {
+            "Description": "Cleans up the extraction temp folder after installation.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[variable('Package.Extract')]",
+                "Recurse": true,
+                "Force": true
+            }
+        }
+    }
+}

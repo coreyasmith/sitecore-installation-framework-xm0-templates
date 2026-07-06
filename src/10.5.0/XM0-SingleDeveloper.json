@@ -1,0 +1,502 @@
+{
+    "Parameters": {
+        "LicenseFile": {
+            "Type": "String",
+            "Description": "The path to the Sitecore license file.",
+            "DefaultValue": ".\\License.xml"
+        },
+        "IdentityServerCertificateName": {
+            "Type": "String",
+            "Description": "The name of the certificate to be created for the identity server.",
+            "DefaultValue": ""
+        },
+        "IdentityServerSiteName": {
+            "Type": "String",
+            "Description": "The name of the identity server to be created.",
+            "DefaultValue": "IdentityServer"
+        },
+        "Prefix": {
+            "Type": "String",
+            "DefaultValue": "SC910",
+            "Description": "The prefix for uniquely identifying instances."
+        },
+        "SitecoreSiteName": {
+            "Type": "String",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the Sitecore site."
+        },
+        "SitecoreAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The admin password for the Sitecore instance."
+        },
+        "SitePhysicalRoot": {
+            "Type": "String",
+            "Description": "Root folder to install the site to. If left on the default [systemdrive]:\\inetpub\\wwwroot will be used.",
+            "DefaultValue": ""
+        },
+        "SqlAdminUser": {
+            "Type": "string",
+            "DefaultValue": "sa",
+            "Description": "The Sql admin user account to use when installing databases."
+        },
+        "SqlAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "12345",
+            "Description": "The Sql admin password to use when installing databases."
+        },
+        "SqlEncrypt": {
+            "Type": "String",
+            "DefaultValue": "",
+            "Description": "Enable encryption for SQL connection"
+        },
+        "SqlTrustServerCertificate": {
+            "Type": "String",
+            "DefaultValue": "",
+            "Description": "Trust server certificate for SQL connection"
+        },
+        "SQLServer": {
+            "Type": "String",
+            "DefaultValue": "Localhost",
+            "Description": "The Sql Server where databases will be installed."
+        },
+        "SqlFormsPassword": {
+            "Type": "string",
+            "DefaultValue": "SIF-Default12345",
+            "Description": "The Sql password for the Experience Forms connection string in Sitecore."
+        },
+        "SqlSecurityPassword": {
+            "Type": "string",
+            "DefaultValue": "SIF-Default12345",
+            "Description": "The Sql password for the Security connection string in Sitecore."
+        },
+        "SqlCorePassword": {
+            "Type": "string",
+            "DefaultValue": "SIF-Default12345",
+            "Description": "The Sql password for the Core connection string in Sitecore."
+        },
+        "SqlMasterPassword": {
+            "Type": "string",
+            "DefaultValue": "SIF-Default12345",
+            "Description": "The Sql password for the Master connection string in Sitecore."
+        },
+        "SqlWebPassword": {
+            "Type": "string",
+            "DefaultValue": "SIF-Default12345",
+            "Description": "The Sql password for the Web connection string in Sitecore."
+        },
+        "SolrUrl": {
+            "Type": "String",
+            "DefaultValue": "https://localhost:8983/solr",
+            "Description": "The Solr instance to use."
+        },
+        "SolrAdminUserName": {
+            "Type": "string",
+            "DefaultValue": "admin",
+            "Description": "The admin username for the Solr instance."
+        },
+        "SolrAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The admin password for the Solr instance."
+        },
+        "SolrConnectionUserName": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The connection username for the Solr instance."
+        },
+        "SolrConnectionUserPassword": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The connection password for the Solr instance."
+        },
+        "SolrRoot": {
+            "Type": "String",
+            "DefaultValue": "C:\\solr-10.0.0",
+            "Description": "The file path to the Solr instance."
+        },
+        "SolrService": {
+            "Type": "String",
+            "DefaultValue": "Solr-10.0.0",
+            "Description": "The name of the Solr service."
+        },
+        "SitecorePackage": {
+            "Type": "String",
+            "DefaultValue": "",
+            "Description": "The path to the Sitecore package to deploy."
+        },
+        "IdentityServerPackage": {
+            "Type": "String",
+            "DefaultValue": "",
+            "Description": "The path to the Identity Server package to deploy."
+        },
+        "PasswordRecoveryUrl": {
+            "Type": "string",
+            "Description": "Password recovery Url (Host name of CM instance).",
+            "DefaultValue": "http:\\"
+        },
+        "ClientsConfiguration": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "Sitecore IdentityServer clients configuration"
+        },
+        "AllowedCorsOrigins": {
+            "Type": "string",
+            "Description": "Pipe-separated list of instances (URIs) that are allowed to login via Sitecore Identity.",
+            "DefaultValue": ""
+        },
+        "ClientSecret": {
+            "Type": "string",
+            "Description": "Client secret of PasswordClient section. It's a random string between 1 and 100 symbols long.",
+            "DefaultValue": "IdentityServerClientSecret"
+        },
+        "SitecoreIdentityAuthority": {
+            "Type": "string",
+            "DefaultValue": "https://SitecoreIdentityServerHost",
+            "Description": "IdentityServer provider URI."
+        },
+        "PackagesTempLocation": {
+            "Type": "String",
+            "Description": "Alternative location to save WDP packages. If left on the default $Env:Temp will be used.",
+            "DefaultValue": ""
+        },
+        "DownloadLocations": {
+            "Type": "String",
+            "Description": "File with URI and SHA256 hashes of dynamically downloadable WDPs.",
+            "DefaultValue": ".\\downloads.json"
+        },
+        "Update": {
+            "Type": "bool",
+            "Description": "The parameter for the installing delta WDP packages.",
+            "DefaultValue": false
+        },
+        "DeployToElasticPoolName": {
+            "Type": "String",
+            "Description": "The elastic pool name for deploy databases from the SQL Azure.",
+            "DefaultValue": ""
+        },
+        "EnablePackageInstaller": {
+            "Type": "bool",
+            "Description": "Whether to enable the Package Installer and Package Designer, which Sitecore 10.5 disables by default.",
+            "DefaultValue": true
+        },
+        "AllowTrustServerCertificate": {
+            "Type": "bool",
+            "Description": "The parameter indicates whether the channel will be encrypted while bypassing walking the certificate chain to validate trust. This parameter works, starting from the 22.0.X and later the SqlServer Powershell module version.",
+            "DefaultValue": true
+        },
+        "XdtTransformationsLocation": {
+            "Type": "String",
+            "Description": "Relative location of the XDT transformation within App_Data folder of the site",
+            "DefaultValue": "transforms\\delta\\XDTS"
+        },
+        "CleanupXdts": {
+            "Type": "bool",
+            "Description": "Should the XdtTransformationsLocation be removed after deployment",
+            "DefaultValue": true
+        },
+        "SitecoreSolr:SolrUrl": {
+            "Type": "String",
+            "Reference": "SolrUrl",
+            "Description": "Override to pass SolrURL value to SitecoreSolr config."
+        },
+        "SitecoreSolr:SolrAdminUserName": {
+            "Type": "String",
+            "Reference": "SolrAdminUserName",
+            "Description": "Override to pass SolrAdminUserName value to SitecoreSolr config."
+        },
+        "SitecoreSolr:SolrAdminPassword": {
+            "Type": "String",
+            "Reference": "SolrAdminPassword",
+            "Description": "Override to pass SolrAdminPassword value to SitecoreSolr config."
+        },
+        "SitecoreXM0:SolrUrl": {
+            "Type": "String",
+            "Reference": "SolrUrl",
+            "Description": "Override to pass SolrURL value to SitecoreXM0 config."
+        },
+        "SitecoreSolr:SolrRoot": {
+            "Type": "String",
+            "Reference": "SolrRoot",
+            "Description": "Override to pass SolrRoot value to SitecoreSolr config."
+        },
+        "SitecoreSolr:SolrService": {
+            "Type": "String",
+            "Reference": "SolrService",
+            "Description": "Override to pass SolrService value to SitecoreSolr config."
+        },
+        "SitecoreSolr:CorePrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to SitecoreSolr config."
+        },
+        "SitecoreXM0:SolrCorePrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to SitecoreXM0 config."
+        },
+        "SitecoreXM0:LicenseFile": {
+            "Type": "String",
+            "Reference": "LicenseFile",
+            "Description": "Override to pass LicenseFile value to SitecoreXM0 config."
+        },
+        "IdentityServerCertificates:CertificateName": {
+            "Type": "String",
+            "Reference": "IdentityServerCertificateName",
+            "Description": "Override to pass IdentityServerCertificateName value to IdentityServerCertificates config."
+        },
+        "IdentityServerCertificates:Update": {
+            "Type": "bool",
+            "Reference": "Update",
+            "Description": "Override to pass Update value to Certificates config."
+        },
+        "IdentityServer:SiteName": {
+            "Type": "String",
+            "Reference": "IdentityServerSiteName",
+            "Description": "Override to pass IdentityServerSiteName value to IdentityServer config."
+        },
+        "IdentityServer:EncryptSecurityDbConnection": {
+            "Type": "String",
+            "Reference": "SqlEncrypt",
+            "Description": "Override to pass SqlEncrypt value to IdentityServer config."
+        },
+        "IdentityServer:TrustServerCertificateSecurityDbConnection": {
+            "Type": "String",
+            "Reference": "SqlTrustServerCertificate",
+            "Description": "Override to pass SqlTrustServerCertificate value to IdentityServer config."
+        },
+        "SitecoreXM0:SiteName": {
+            "Type": "String",
+            "Reference": "SitecoreSiteName",
+            "Description": "Override to pass SitecoreSiteName value to SitecoreXM0 config."
+        },
+        "IdentityServer:SitePhysicalRoot": {
+            "Type": "String",
+            "Reference": "SitePhysicalRoot",
+            "Description": "Override to pass SitePhysicalRoot value to IdentityServer config."
+        },
+        "SitecoreXM0:SitePhysicalRoot": {
+            "Type": "String",
+            "Reference": "SitePhysicalRoot",
+            "Description": "Override to pass SitePhysicalRoot value to SitecoreXM0 config."
+        },
+        "IdentityServer:SitecoreIdentityCert": {
+            "Type": "String",
+            "Reference": "IdentityServerCertificateName",
+            "Description": "Override to pass IdentityServerCertificateName value to IdentityServer config."
+        },
+        "IdentityServer:LicenseFile": {
+            "Type": "String",
+            "Reference": "LicenseFile",
+            "Description": "Override to pass LicenseFile value to IdentityServer config."
+        },
+        "IdentityServer:ClientsConfiguration": {
+            "Type": "String",
+            "Reference": "ClientsConfiguration",
+            "Description": "Override to pass ClientsConfiguration value to IdentityServer config."
+        },
+        "IdentityServer:PasswordRecoveryUrl": {
+            "Type": "String",
+            "Reference": "PasswordRecoveryUrl",
+            "Description": "Override to pass PasswordRecoveryUrl value to IdentityServer config."
+        },
+        "SitecoreXM0:Package": {
+            "Type": "String",
+            "Reference": "SitecorePackage",
+            "Description": "Override to pass SitecorePackage value to SitecoreXM0 config."
+        },
+        "IdentityServer:Package": {
+            "Type": "String",
+            "Reference": "IdentityServerPackage",
+            "Description": "Override to pass IdentityServerPackage value to IdentityServer config."
+        },
+        "SitecoreXM0:SqlDbPrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to SitecoreXM0 config."
+        },
+        "IdentityServer:SqlDbPrefix": {
+            "Type": "String",
+            "Reference": "Prefix",
+            "Description": "Override to pass Prefix value to IdentityServer config."
+        },
+        "SitecoreXM0:SqlServer": {
+            "Type": "String",
+            "Reference": "SQLServer",
+            "Description": "Override to pass SqlServer value to SitecoreXM0 config."
+        },
+        "IdentityServer:SqlServer": {
+            "Type": "String",
+            "Reference": "SQLServer",
+            "Description": "Override to pass SqlServer value to IdentityServer config."
+        },
+        "SitecoreXM0:SqlAdminUser": {
+            "Type": "String",
+            "Reference": "SqlAdminUser",
+            "Description": "Override to pass SqlAdminUser value to SitecoreXM0 config."
+        },
+        "SitecoreXM0:SqlAdminPassword": {
+            "Type": "String",
+            "Reference": "SqlAdminPassword",
+            "Description": "Override to pass SqlAdminPassword value to SitecoreXM0 config."
+        },
+        "IdentityServer:AllowedCorsOrigins": {
+            "Type": "String",
+            "Reference": "AllowedCorsOrigins",
+            "Description": "Override to pass AllowedCorsOrigins value to IdentityServer config."
+        },
+        "SitecoreXM0:SitecoreIdentityAuthority": {
+            "Type": "String",
+            "Reference": "SitecoreIdentityAuthority",
+            "Description": "Override to pass SitecoreIdentityAuthority value to SitecoreXM0 config."
+        },
+        "IdentityServer:PackagesTempLocation": {
+            "Type": "String",
+            "Reference": "PackagesTempLocation",
+            "Description": "Override to pass PackagesTempLocation value to IdentityServer config."
+        },
+        "SitecoreXM0:PackagesTempLocation": {
+            "Type": "String",
+            "Reference": "PackagesTempLocation",
+            "Description": "Override to pass PackagesTempLocation name value to SitecoreXM0 config."
+        },
+        "IdentityServer:DownloadLocations": {
+            "Type": "String",
+            "Reference": "DownloadLocations",
+            "Description": "Override to pass DownloadLocations value to IdentityServer config."
+        },
+        "SitecoreXM0:DownloadLocations": {
+            "Type": "String",
+            "Reference": "DownloadLocations",
+            "Description": "Override to pass DownloadLocations name value to SitecoreXM0 config."
+        },
+        "SitecoreXM0:SitecoreAdminPassword": {
+            "Type": "String",
+            "Reference": "SitecoreAdminPassword",
+            "Description": "Override to pass SitecoreAdminPassword name value to SitecoreXM0 config."
+        },
+        "SitecoreXM0:Update": {
+            "Type": "bool",
+            "Reference": "Update",
+            "Description": "Override to pass Update value to SitecoreXM0 config."
+        },
+        "IdentityServer:Update": {
+            "Type": "bool",
+            "Reference": "Update",
+            "Description": "Override to pass Update value to IdentityServer config."
+        },
+        "SitecoreSolr:Update": {
+            "Type": "bool",
+            "Reference": "Update",
+            "Description": "Override to pass Update value to SitecoreSolr config."
+        },
+        "SitecoreXM0:DeployToElasticPoolName": {
+            "Type": "String",
+            "Reference": "DeployToElasticPoolName",
+            "Description": "Override to pass DeployToElasticPoolName value to SitecoreXM0 config."
+        },
+        "SitecoreXM0:EnablePackageInstaller": {
+            "Type": "bool",
+            "Reference": "EnablePackageInstaller",
+            "Description": "Override to pass EnablePackageInstaller value to SitecoreXM0 config."
+        },
+        "SitecoreXM0:AllowTrustServerCertificate": {
+            "Type": "bool",
+            "Reference": "AllowTrustServerCertificate",
+            "Description": "Override to pass AllowTrustServerCertificate name value to SitecoreXM0 config."
+        },
+        "SitecoreXM0:XdtTransformationsLocation": {
+            "Type": "String",
+            "Reference": "XdtTransformationsLocation",
+            "Description": "Relative location of the XDT transformation within App_Data folder of the site"
+        },
+        "SitecoreXM0:CleanupXdts": {
+            "Type": "bool",
+            "Reference": "CleanupXdts",
+            "Description": "Should the XdtTransformationsLocation be removed"
+        }
+    },
+    "Variables": {
+        "SqlCore.Password": "[if(variable('Test.SqlCore.Password'),variable('Generate.SqlCore.Password'),parameter('SqlCorePassword'))]",
+        "SitecoreXM0:SqlCore.Password": "[variable('SqlCore.Password')]",
+        "Test.SqlCore.Password": "[equal(parameter('SqlCorePassword'),'SIF-Default12345')]",
+        "Generate.SqlCore.Password": "[randomstring(Length:20,DisAllowSpecial:True,EnforceComplexity:True)]",
+
+        "SqlSecurity.Password": "[if(variable('Test.SqlSecurity.Password'),variable('Generate.SqlSecurity.Password'),parameter('SqlSecurityPassword'))]",
+        "SitecoreXM0:SqlSecurity.Password": "[variable('SqlSecurity.Password')]",
+        "IdentityServer:Sql.Database.Password": "[variable('SqlSecurity.Password')]",
+        "Test.SqlSecurity.Password": "[equal(parameter('SqlSecurityPassword'),'SIF-Default12345')]",
+        "Generate.SqlSecurity.Password": "[randomstring(Length:20,DisAllowSpecial:True,EnforceComplexity:True)]",
+
+        "SqlMaster.Password": "[if(variable('Test.SqlMaster.Password'),variable('Generate.SqlMaster.Password'),parameter('SqlMasterPassword'))]",
+        "SitecoreXM0:SqlMaster.Password": "[variable('SqlMaster.Password')]",
+        "Test.SqlMaster.Password": "[equal(parameter('SqlMasterPassword'),'SIF-Default12345')]",
+        "Generate.SqlMaster.Password": "[randomstring(Length:20,DisAllowSpecial:True,EnforceComplexity:True)]",
+
+        "SqlWeb.Password": "[if(variable('Test.SqlWeb.Password'),variable('Generate.SqlWeb.Password'),parameter('SqlWebPassword'))]",
+        "SitecoreXM0:SqlWeb.Password": "[variable('SqlWeb.Password')]",
+        "Test.SqlWeb.Password": "[equal(parameter('SqlWebPassword'),'SIF-Default12345')]",
+        "Generate.SqlWeb.Password": "[randomstring(Length:20,DisAllowSpecial:True,EnforceComplexity:True)]",
+
+        "SqlForms.Password": "[if(variable('Test.SqlForms.Password'),variable('Generate.SqlForms.Password'),parameter('SqlFormsPassword'))]",
+        "SitecoreXM0:SqlForms.Password": "[variable('SqlForms.Password')]",
+        "Test.SqlForms.Password": "[equal(parameter('SqlFormsPassword'),'SIF-Default12345')]",
+        "Generate.SqlForms.Password": "[randomstring(Length:20,DisAllowSpecial:True,EnforceComplexity:True)]",
+
+        "Solr.ConnectionUser.Password": "[if(variable('Test.Solr.ConnectionUser.Password'),variable('Generate.Solr.ConnectionUser.Password'),parameter('SolrConnectionUserPassword'))]",
+        "Test.Solr.ConnectionUser.Password": "[equal(parameter('SolrConnectionUserPassword'),'')]",
+        "Generate.Solr.ConnectionUser.Password": "[randomstring(Length:20,DisAllowSpecial:True,EnforceComplexity:True)]",
+
+        "Solr.ConnectionUser.UserName": "[if(variable('Test.Solr.ConnectionUser.UserName'),parameter('Prefix'),parameter('SolrConnectionUserName'))]",
+        "Test.Solr.ConnectionUser.UserName": "[equal(parameter('SolrConnectionUserName'),'')]",
+
+        "Solr.Credentials": "[concat(variable('Solr.ConnectionUser.UserName'), ':', variable('Solr.ConnectionUser.Password'))]",
+        "SitecoreSolr:Solr.ConnectionUser.UserName": "[variable('Solr.ConnectionUser.UserName')]",
+        "SitecoreSolr:Solr.ConnectionUser.Password": "[variable('Solr.ConnectionUser.Password')]",
+        "SitecoreXM0:Solr.Credentials": "[variable('Solr.Credentials')]",
+
+        "Client.Secret" : "[if(variable('Test.Client.Secret'),variable('Generate.Client.Secret'),parameter('ClientSecret'))]",
+        "IdentityServer:Client.Secret": "[variable('Client.Secret')]",
+        "SitecoreXM0:Sitecore.IdentitySecret": "[variable('Client.Secret')]",
+        "Test.Client.Secret": "[equal(parameter('ClientSecret'),'SIF-Default')]",
+        "Generate.Client.Secret": "[randomstring(Length:100,DisAllowSpecial:True)]"
+    },
+    "Includes" : {
+        "IdentityServerCertificates":{
+            "Source": ".\\templates\\createcert.json"
+        },
+        "IdentityServer": {
+            "Source": ".\\templates\\IdentityServer.json"
+        },
+        "SitecoreSolr": {
+            "Source": ".\\templates\\sitecore-solr.json"
+        },
+        "SitecoreXM0": {
+            "Source": ".\\templates\\sitecore-XM0.json"
+        }
+    },
+    "Register": {
+        "Tasks": {
+            "SetVariable": "Set-Variable"
+        }
+    },
+    "Tasks": {
+        "GeneratePasswords": {
+            "Description": "Generates all shared passwords and secrets.",
+            "Type": "SetVariable",
+            "Params": {
+                "Name": "XM0Passwords",
+                "Scope": "Global",
+                "Value": [
+                    {"SqlCorePassword":       "[variable('SqlCore.Password')]"},
+                    {"SqlSecurityPassword":   "[variable('SqlSecurity.Password')]"},
+                    {"SqlMasterPassword":     "[variable('SqlMaster.Password')]"},
+                    {"SqlWebPassword":        "[variable('SqlWeb.Password')]"},
+                    {"SqlFormsPassword":      "[variable('SqlForms.Password')]"},
+                    {"ClientSecret":          "[variable('Client.Secret')]"}
+                ]
+            },
+            "Skip": "[parameter('Update')]"
+        }
+    }
+}

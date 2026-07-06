@@ -1,0 +1,102 @@
+{
+    "Parameters": {
+        "Package": {
+            "Type": "string",
+            "Description": "The path to the Identity Server upgrade script package to run against the security database.",
+            "DefaultValue": ""
+        },
+        "SqlServer": {
+            "Type": "string",
+            "DefaultValue": ".\\SQLSERVER",
+            "Description": "The Sql Server where databases will be installed."
+        },
+        "SqlAdminUser": {
+            "Type": "string",
+            "DefaultValue": "sa",
+            "Description": "The Sql admin user account to use when installing databases."
+        },
+        "SqlAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "12345",
+            "Description": "The Sql admin password to use when installing databases."
+        },
+        "SqlDbPrefix": {
+            "Type": "string",
+            "Description": "The prefix used for all Sql databases.",
+            "DefaultValue": "Sitecore"
+        },
+        "SqlSecurityDbName": {
+            "Type": "string",
+            "DefaultValue": "_Core",
+            "Description": "The database that holds the Identity Server tables."
+        },
+        "AllowTrustServerCertificate": {
+            "Type": "bool",
+            "Description": "The parameter indicates whether the channel will be encrypted while bypassing walking the certificate chain to validate trust. This parameter works, starting from the 22.0.X and later the SqlServer Powershell module version.",
+            "DefaultValue": true
+        }
+    },
+    "Variables": {
+        "Package.Extract": "[joinpath(environment('TEMP'), concat(parameter('SqlDbPrefix'), '.identityserver-security'))]",
+        "Package.Script": "[joinpath(variable('Package.Extract'), 'CMS_security_IdentityServer.sql')]",
+
+        "Sql.Database.Name": "[concat(parameter('SqlDbPrefix'), parameter('SqlSecurityDbName'))]",
+        "Sql.Secure.Password": "[ConvertToSecureString(String:parameter('SqlAdminPassword'),AsPlainText:true,Force:true)]",
+        "Sql.Credential": "[NewPSCredential(Username:parameter('SqlAdminUser'),Password:variable('Sql.Secure.Password'))]",
+
+        "Get.Parameter.TrustServerCertificate.Cmdlet": "[GetHelp(Name:'Invoke-Sqlcmd', Parameter:'TrustServerCertificate', ErrorAction:'SilentlyContinue')]",
+        "Get.Parameter.TrustServerCertificate.Name": "[SelectObject(InputObject:variable('Get.Parameter.TrustServerCertificate.Cmdlet'),ExpandProperty:'Name')]",
+        "Get.Parameter.TrustServerCertificate.Exists": "[if(variable('Get.Parameter.TrustServerCertificate.Name'),1,0)]",
+        "Get.Parameter.TrustServerCertificate.Exists.Boolean": "[equal(variable('Get.Parameter.TrustServerCertificate.Exists'), 1)]"
+    },
+    "Register": {
+        "Tasks": {
+            "InvokeSqlcmd": "Invoke-Sqlcmd"
+        },
+        "ConfigFunction": {
+            "ConvertToSecureString": "ConvertTo-SecureString",
+            "SelectObject": "Select-Object",
+            "GetHelp": "Get-Help"
+        }
+    },
+    "Tasks": {
+        "CleanExtractLocation": {
+            "Description": "Creates (or empties) the temp folder the upgrade script zip is extracted to.",
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Package.Extract')]" ]
+            }
+        },
+        "ExtractUpgradeScript": {
+            "Description": "Extracts the upgrade script zip.",
+            "Type": "Unpack",
+            "Params": {
+                "Source": "[resolvepath(parameter('Package'))]",
+                "Destination": "[variable('Package.Extract')]"
+            }
+        },
+        "UpdateSecurityDatabaseWithTrustServerCertificateParameter": {
+            "Description": "Runs the Identity Server upgrade script against the security database.",
+            "Type": "InvokeSqlcmd",
+            "Params": {
+                "ServerInstance": "[parameter('SqlServer')]",
+                "Database": "[variable('Sql.Database.Name')]",
+                "Credential": "[variable('Sql.Credential')]",
+                "InputFile": "[variable('Package.Script')]",
+                "TrustServerCertificate": "[parameter('AllowTrustServerCertificate')]"
+            },
+            "Skip": "[not(variable('Get.Parameter.TrustServerCertificate.Exists.Boolean'))]"
+        },
+        "UpdateSecurityDatabaseWithoutTrustServerCertificateParameter": {
+            "Description": "Runs the Identity Server upgrade script against the security database.",
+            "Type": "InvokeSqlcmd",
+            "Params": {
+                "ServerInstance": "[parameter('SqlServer')]",
+                "Database": "[variable('Sql.Database.Name')]",
+                "Credential": "[variable('Sql.Credential')]",
+                "InputFile": "[variable('Package.Script')]"
+            },
+            "Skip": "[variable('Get.Parameter.TrustServerCertificate.Exists.Boolean')]"
+        }
+    }
+}

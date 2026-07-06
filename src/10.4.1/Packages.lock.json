@@ -1,0 +1,70 @@
+{
+    "Version": "10.4.1",
+    "Packages": [
+        {
+            "Name": "license.xml",
+            "Length": null,
+            "Sha256": null
+        },
+        {
+            "Name": "Sitecore 10.4.1 rev. 012149 (XM) (OnPrem)_cm.scwdp.zip",
+            "Length": 202237159,
+            "Sha256": "42FA13CE0A6E9C1D870B32A80E9AA94232A3BCEB2C59EC6BED96E21259C13C6A"
+        },
+        {
+            "Name": "Sitecore Experience Accelerator XM 10.4.0 rev. 08675.scwdp.zip",
+            "Length": 26068136,
+            "Sha256": "4B502309ABE7B0FA0002228F55191DF81FF406F1422DA53287C21444B58382DB"
+        },
+        {
+            "Name": "Sitecore Headless Services Server XM 22.0.11.scwdp.zip",
+            "Length": 2037966,
+            "Sha256": "68DBA750F3A6FB1AB11869B44D53735C4F1AF4DED6D50A74A744A69E9DACF935"
+        },
+        {
+            "Name": "Sitecore.IdentityServer.9.0.7.scwdp.zip",
+            "Length": 17452341,
+            "Sha256": "2A162C78F170499B5D05439644BAC7343B3E846E45168ED77A136E55B3B6BA57"
+        },
+        {
+            "Name": "Sitecore.ManagementServices 5.2.129.scwdp.zip",
+            "Length": 1625932,
+            "Sha256": "61A3EF0A588EF61D4B0E9F3E2A22D88E160AAB8B455E302FEC1CA4D4BD6AE9F3"
+        },
+        {
+            "Name": "Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip",
+            "Length": 2063550,
+            "Sha256": "C373CDF49360D3A4E3023FDA5F9BACD110E73A01A508BDD631F255C9FBEBA7EA"
+        },
+        {
+            "Name": "Sitecore 10.4.2 rev. 014339 PRE (XM) (OnPrem)_cm.delta.scwdp.zip",
+            "Length": 10131579,
+            "Sha256": "93ED18707976990986DD51B470DF523A6AF0CDD562A8179E843CCF6F78387B23"
+        },
+        {
+            "Name": "Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.delta.scwdp.zip",
+            "Length": 2783,
+            "Sha256": "BC10E1A96CC40B7D337C9A1CBF8C782AE4EFFAA0ED152C55250BE3F6DB9EFF58"
+        },
+        {
+            "Name": "SC Hotfix-PDXP-22057-1 JSS 22.0.0.zip",
+            "Length": 100513,
+            "Sha256": "BD3F25B7FA58442368C6AF7ACD41CC6D8880548BB99EF93B6534108EDD036DA0"
+        },
+        {
+            "Name": "SC Hotfix-PDXP-22153-1 GraphQL 8.0.0.zip",
+            "Length": 881034,
+            "Sha256": "EC8DD9DA64A16C782599DA78F2AB23D7D485F678A36C2CBF5887755585EAA42C"
+        },
+        {
+            "Name": "SC Hotfix-PDXP-25202-1 Layout Service 10.0.6.zip",
+            "Length": 137408,
+            "Sha256": "E415B90161A61DF820E72F424A12132E6FC84935BDAD5E63CF86F669A74FE3C4"
+        },
+        {
+            "Name": "SC Hotfix SXA-9041-2 10.4.0 rev. 08675.zip",
+            "Length": 25137313,
+            "Sha256": "A71887B6913FCCCB53A1152D017BA2B2180484DBC68B5EDBE2EF9F618B5ACE2C"
+        }
+    ]
+}

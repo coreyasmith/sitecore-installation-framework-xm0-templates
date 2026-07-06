@@ -1,0 +1,65 @@
+{
+    "Version": "9.3.0",
+    "Packages": [
+        {
+            "Name": "license.xml",
+            "Length": null,
+            "Sha256": null
+        },
+        {
+            "Name": "Sitecore 9.3.0 rev. 003498 (XM) (OnPrem)_cm.scwdp.zip",
+            "Length": 190601621,
+            "Sha256": "11D927C74BBAF46212434853F19B035E0B9A8CF1F5808E12AD7D7174932F1D70"
+        },
+        {
+            "Name": "Sitecore Experience Accelerator XM 9.3.0.2589.scwdp.zip",
+            "Length": 17235627,
+            "Sha256": "A5E2831AB106C204AF1202FF00DEB6FB9619D490C687BA992FE279106EC4278B"
+        },
+        {
+            "Name": "Sitecore JavaScript Services Server for Sitecore 9.3 XM 13.0.0 rev. 190924.scwdp.zip",
+            "Length": 1355117,
+            "Sha256": "5D1B99F385B9CD719E32017E2EC1E9D49AC6F2F1B595949B3E0C5D624386A524"
+        },
+        {
+            "Name": "Sitecore.IdentityServer.8.0.37.scwdp.zip",
+            "Length": 17379862,
+            "Sha256": "608B9754CF313CE54CBEB3E99A5157F9011E11163CF684322176351314E6E1D9"
+        },
+        {
+            "Name": "Sitecore.IdentityServer.UpgradeScripts.8.0.zip",
+            "Length": 1458,
+            "Sha256": "4AB629FB6AAE70B46199F5429EC47514F5039A01DE65A0EE8F23A2CA993A488C"
+        },
+        {
+            "Name": "Sitecore.PowerShell.Extensions-8.0.scwdp.zip",
+            "Length": 1827432,
+            "Sha256": "A5EF5730751C325AA21F69081DF8F50A8E18E4BCE5A2F41ABE0134E23352314C"
+        },
+        {
+            "Name": "SC Hotfix PDXP-7469-1.zip",
+            "Length": 5454958,
+            "Sha256": "979138FC78F88821CBEAF92D3998183326D989A299F2E8E89FA5DEC214A7885D"
+        },
+        {
+            "Name": "SC Hotfix SXA-8487-1 9.3.0.2589.zip",
+            "Length": 1307098,
+            "Sha256": "DAD7FDF8753408A7A0E95A2260607F785F3D60D4CB1062322B6D3AA49FB6E784"
+        },
+        {
+            "Name": "Sitecore.Support.PDXP-9109.zip",
+            "Length": 6105,
+            "Sha256": "E90F7E5F98497A62882ADA0F9B857EA9697DD4776534EEFEE96BD93D664CE240"
+        },
+        {
+            "Name": "Sitecore.Support.9.0-9.3.zip",
+            "Length": 13021,
+            "Sha256": "A6D75A69537B6AA3DD3115A8018507DACE0AABEE4913B8C6002B1BF382AAA165"
+        },
+        {
+            "Name": "Sitecore.Support.PDXP-11460.zip",
+            "Length": 6823,
+            "Sha256": "3AF85C1B2E9CBAC5C18AF8C94EE195D814E9568544A54C5D4E41674E99995DC2"
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "Version": "10.5.0",
+    "Packages": [
+        {
+            "Name": "license.xml",
+            "Length": null,
+            "Sha256": null
+        },
+        {
+            "Name": "Sitecore 10.5.0 rev. 014188 (XM) (OnPrem)_cm.scwdp.zip",
+            "Length": 200503619,
+            "Sha256": "A844235B3D285AF40FE906EA4826CF2ECBF76CD2C92A2D16D2D0023065E64DA6"
+        },
+        {
+            "Name": "Sitecore Headless Services Server XM 23.0.32.scwdp.zip",
+            "Length": 2084503,
+            "Sha256": "DFC45EE4A06D7161A6D3648A1A40F4F89F601CB60C6FD2D65DA5767B7D9667D6"
+        },
+        {
+            "Name": "Sitecore.IdentityServer 9.0 rev. 7 (OnPrem)_identityserver.scwdp.zip",
+            "Length": 17452341,
+            "Sha256": "2A162C78F170499B5D05439644BAC7343B3E846E45168ED77A136E55B3B6BA57"
+        },
+        {
+            "Name": "Sitecore.ManagementServices 5.2.129.scwdp.zip",
+            "Length": 1625932,
+            "Sha256": "61A3EF0A588EF61D4B0E9F3E2A22D88E160AAB8B455E302FEC1CA4D4BD6AE9F3"
+        },
+        {
+            "Name": "Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip",
+            "Length": 2063550,
+            "Sha256": "C373CDF49360D3A4E3023FDA5F9BACD110E73A01A508BDD631F255C9FBEBA7EA"
+        }
+    ]
+}

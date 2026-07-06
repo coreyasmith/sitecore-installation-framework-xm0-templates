@@ -1,0 +1,170 @@
+{
+    "Parameters": {
+        "Package": {
+            "Type": "string",
+            "Description": "The path to the Sitecore module package zip to convert and deploy.",
+            "DefaultValue": ""
+        },
+        "SiteName": {
+            "Type": "string",
+            "DefaultValue": "Sitecore",
+            "Description": "The name of the site to be deployed."
+        },
+        "XdtDirectory": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The path of the folder that contains the XDT transforms for the cumulative hotfix."
+        },
+        "CleanupXdts": {
+            "Type": "bool",
+            "Description": "Should the XdtDirectory be removed after deployment.",
+            "DefaultValue": true
+        },
+        "FilesDirectory": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The path of the folder that contains the hotfix instruction files to copy into the website root."
+        },
+        "DisableFiles": {
+            "Type": "array",
+            "DefaultValue": [],
+            "Description": "The site-relative paths of config files that do not apply to this topology."
+        },
+        "SatToolsPath": {
+            "Type": "string",
+            "DefaultValue": ".\\lib\\sat\\tools",
+            "Description": "The path of the Sitecore Azure Toolkit tools folder used to convert the module package."
+        }
+    },
+    "Variables": {
+        "Site.PhysicalPath": "[joinpath(environment('SystemDrive'), 'inetpub', 'wwwroot', parameter('SiteName'))]",
+        "Site.DataFolder": "[joinpath(variable('Site.PhysicalPath'), 'App_Data')]",
+        "Convert.Directory": "[joinpath(environment('TEMP'), concat(parameter('SiteName'), '.module-hotfix'))]",
+        "Convert.Package": "[joinpath(variable('Convert.Directory'), 'module.scwdp.zip')]"
+    },
+    "Register": {
+        "Tasks": {
+            "RemoveItem": "Remove-Item"
+        },
+        "ConfigFunction": {
+            "TestPath": "Test-Path"
+        }
+    },
+    "Modules": [
+        ".\\templates\\module-hotfix.psm1"
+    ],
+    "Tasks": {
+        "CleanConvertLocation": {
+            "Description": "Creates (or empties) the temp folder the module package is converted in.",
+            "Type": "EnsurePath",
+            "Params": {
+                "Clean": [ "[variable('Convert.Directory')]" ]
+            }
+        },
+        "ConvertModulePackage": {
+            "Description": "Converts the module package to a Web Deploy package.",
+            "Type": "ConvertSitecoreModule",
+            "Params": {
+                "Path": "[resolvepath(parameter('Package'))]",
+                "SatToolsPath": "[resolvepath(parameter('SatToolsPath'))]",
+                "Destination": "[variable('Convert.Directory')]"
+            }
+        },
+        "StopWebsite": {
+            "Description": "Stops the website if it is running.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop"
+            }
+        },
+        "StopAppPool": {
+            "Description": "Stops the app pool if it is running.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Stop",
+                "Timeout": 60
+            }
+        },
+        "InstallWDP": {
+            "Description": "Syncs the web deploy package with the website.",
+            "Type": "WebDeploy",
+            "Params": {
+                "Verb": "Sync",
+                "Arguments": {
+                    "Source": {
+                        "Package": "[variable('Convert.Package')]"
+                    },
+                    "Dest": "Auto",
+                    "enableRule": "DoNotDeleteRule",
+                    "SetParam": [
+                        { "Name": "Application Path", "Value": "[parameter('SiteName')]" }
+                    ]
+                }
+            }
+        },
+        "TransformXmlDocuments": {
+            "Type": "TransformXmlDoc",
+            "Params": {
+                "RootDirectoryPath": "[variable('Site.PhysicalPath')]",
+                "XdtDirectory": "[joinpath(variable('Site.DataFolder'), parameter('XdtDirectory'))]"
+            },
+            "Skip": "[or(not(parameter('XdtDirectory')), not(TestPath(joinpath(variable('Site.DataFolder'), parameter('XdtDirectory')))))]"
+        },
+        "CleanupXdtDirectory": {
+            "Description": "Cleans up the XDT directory after deployment.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[joinpath(variable('Site.DataFolder'), parameter('XdtDirectory'))]",
+                "Recurse": true,
+                "ErrorAction": "SilentlyContinue"
+            },
+            "Skip": "[or(not(parameter('XdtDirectory')), not(parameter('CleanupXdts')), not(TestPath(joinpath(variable('Site.DataFolder'), parameter('XdtDirectory')))))]"
+        },
+        "CopyPatchFiles": {
+            "Description": "Copies the hotfix instruction files into the website root.",
+            "Type": "Copy",
+            "Params": {
+                "Source": "[joinpath(parameter('FilesDirectory'), '*')]",
+                "Destination": "[variable('Site.PhysicalPath')]"
+            },
+            "Skip": "[not(parameter('FilesDirectory'))]"
+        },
+        "DisableConfigFiles": {
+            "Description": "Disables config files that do not apply to this topology.",
+            "Type": "DisableConfigFiles",
+            "Params": {
+                "RootDirectoryPath": "[variable('Site.PhysicalPath')]",
+                "Path": "[parameter('DisableFiles')]"
+            },
+            "Skip": "[not(parameter('DisableFiles'))]"
+        },
+        "StartAppPool": {
+            "Description": "Starts the app pool.",
+            "Type": "ManageAppPool",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start",
+                "Timeout": 60
+            }
+        },
+        "StartWebsite": {
+            "Description": "Starts the website.",
+            "Type": "ManageWebsite",
+            "Params": {
+                "Name": "[parameter('SiteName')]",
+                "Action": "Start"
+            }
+        },
+        "CleanupConvertLocation": {
+            "Description": "Cleans up the conversion temp folder after deployment.",
+            "Type": "RemoveItem",
+            "Params": {
+                "Path": "[variable('Convert.Directory')]",
+                "Recurse": true,
+                "Force": true
+            }
+        }
+    }
+}
