@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build template zips
+        run: |
+          mkdir -p dist
+          for dir in src/*/; do
+            version=$(basename "$dir")
+            # --worktree-attributes applies the root .gitattributes (CRLF) to the subtree archive.
+            git archive --worktree-attributes --format=zip \
+              --output="dist/Sitecore.XM0.SIF.Templates-${version}.zip" "HEAD:src/${version}"
+          done
+          ls -l dist
+
+      - name: Verify template zips
+        run: |
+          for dir in src/*/; do
+            version=$(basename "$dir")
+            zip="dist/Sitecore.XM0.SIF.Templates-${version}.zip"
+            expected=$(git ls-files "src/${version}" | wc -l)
+            actual=$(unzip -Z1 "$zip" | grep -vc '/$')
+            if [ "$expected" -ne "$actual" ]; then
+              echo "::error::${zip} has ${actual} files, expected ${expected}"
+              exit 1
+            fi
+            if ! unzip -p "$zip" XM0-SingleDeveloper.ps1 | file - | grep -q CRLF; then
+              echo "::error::${zip}: XM0-SingleDeveloper.ps1 does not have CRLF line endings"
+              exit 1
+            fi
+            echo "${zip}: ${actual} files, CRLF"
+          done
+
+      - name: Upload zips
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sitecore.XM0.SIF.Templates
+          path: dist/*.zip
+
+      - name: Publish release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          # Publishing a release in the GitHub UI creates its tag too, so the release may already exist.
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/*.zip --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/*.zip --title "$GITHUB_REF_NAME" --generate-notes --verify-tag
+          fi
