@@ -66,6 +66,17 @@ $singleDeveloperParams = @{
     SitecoreSitename = $SitecoreSiteName
 }
 
+# Install Sitecore JavaScript Services Server on the XM0 CM site.
+$javaScriptServicesParams = @{
+    Path = "$SCInstallRoot\Sitecore.JavaScriptServices-XM0.json"
+    Package = $JavaScriptServicesPackage
+    SiteName = $SitecoreSiteName
+    SqlServer = $SqlServer
+    SqlAdminUser = $SqlAdminUser
+    SqlAdminPassword = $SqlAdminPassword
+    SqlDbPrefix = $Prefix
+}
+
 # Install SPE + SXA via combined partials file.
 $sxaParams = @{
     Path = "$SCInstallRoot\SXA-SingleDeveloper-XM0.json"
@@ -80,17 +91,6 @@ $sxaParams = @{
     SolrRoot = $SolrRoot
     SolrService = $SolrService
     SiteName = $SitecoreSiteName
-}
-
-# Install Sitecore JavaScript Services Server on the XM0 CM site.
-$javaScriptServicesParams = @{
-    Path = "$SCInstallRoot\Sitecore.JavaScriptServices-XM0.json"
-    Package = $JavaScriptServicesPackage
-    SiteName = $SitecoreSiteName
-    SqlServer = $SqlServer
-    SqlAdminUser = $SqlAdminUser
-    SqlAdminPassword = $SqlAdminPassword
-    SqlDbPrefix = $Prefix
 }
 
 # Install Security Bulletin SC2023-003-587441.
@@ -126,8 +126,8 @@ Push-Location $SCInstallRoot
 if (!$Uninstall) {
     if (!$Update) {
         Install-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'XM0-SingleDeveloper.log')
-        Install-SitecoreConfiguration @sxaParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'SXA-SingleDeveloper.log')
         Install-SitecoreConfiguration @javaScriptServicesParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore.JavaScriptServices-SingleDeveloper.log')
+        Install-SitecoreConfiguration @sxaParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'SXA-SingleDeveloper.log')
     } else {
         Install-SitecoreConfiguration @sc2023_003Params *>&1 | Tee-Object (Join-Path $LogsDirectory 'SC2023-003-587441.log')
         Install-SitecoreConfiguration @sc2025_001Params *>&1 | Tee-Object (Join-Path $LogsDirectory 'SC2025-001-7922.log')
