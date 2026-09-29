@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly xdt:Locator="Condition(_defaultNamespace:assemblyIdentity/@name='Newtonsoft.Json')">
+        <bindingRedirect oldVersion="0.0.0.0-11.0.0.0" xdt:Transform="SetAttributes(oldVersion)" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
   <system.webServer>
     <handlers>
       <add verb="*" path="sitecorejss_media.ashx" type="Sitecore.JavaScriptServices.Media.MediaRequestHandler, Sitecore.JavaScriptServices.Media" name="Sitecore.JavaScriptServices.Media.MediaRequestHandler"
