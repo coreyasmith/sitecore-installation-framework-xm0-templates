@@ -42,14 +42,14 @@
             "Sha256": "C373CDF49360D3A4E3023FDA5F9BACD110E73A01A508BDD631F255C9FBEBA7EA"
         },
         {
-            "Name": "Sitecore 10.2.3 rev. 013888 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip",
-            "Length": 16606585,
-            "Sha256": "C7B8BDD5B145A351DD4112136426CAED6444F7507D6F26D08BFC078D8D9EDA66"
+            "Name": "Sitecore 10.2.3 rev. 014545 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip",
+            "Length": 43499595,
+            "Sha256": "37F3C8B698245C7AC8E42549F2CD60BC4EF0DAF24D15B392E082C6FC7824E760"
         },
         {
             "Name": "Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.cumulative.delta.scwdp.zip",
             "Length": 2783,
-            "Sha256": "F19BDB54771A9150B80D28BBDDCD80FEC025A8D3EF6A74C3C8E2E6CF95BBB32F"
+            "Sha256": "DD6377C26D22BC3542084E10B43BBCBC77BD753A2EA4D8B06D162E98DBC2DCF9"
         },
         {
             "Name": "SC Hotfix 609694-1 Layout Service 8.1.0.zip",

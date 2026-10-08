@@ -27,8 +27,8 @@ XM Single (XM0) templates for [Sitecore 10.4 Update-1][1]. These templates insta
    - `Sitecore.IdentityServer.9.0.7.scwdp.zip` (_Sitecore Identity Server WDP_ for _On-premises deployments_)
    - `Sitecore.ManagementServices 5.2.129.scwdp.zip`
    - `Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip`
-   - `Sitecore 10.4.2 rev. 014339 PRE (XM) (OnPrem)_cm.delta.scwdp.zip`[^1] (extract from `Sitecore 10.4.2 rev. 014339 (DELTA WDP XM1 packages).zip`)
-   - `Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.delta.scwdp.zip`[^1] (extract from `Sitecore 10.4.2 rev. 014339 (DELTA WDP XM1 packages).zip`)
+   - `Sitecore 10.4.2 rev. 014548 PRE (XM) (OnPrem)_cm.delta.scwdp.zip`[^1] (extract from `Sitecore 10.4.2 rev. 014548 (DELTA WDP XM1 packages).zip`)
+   - `Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.delta.scwdp.zip`[^1] (extract from `Sitecore 10.4.2 rev. 014548 (DELTA WDP XM1 packages).zip`)
    - `SC Hotfix-PDXP-22057-1 JSS 22.0.0.zip` (Cumulative hotfixes for Sitecore Headless Rendering 22)
    - `SC Hotfix-PDXP-22153-1 GraphQL 8.0.0.zip` (Cumulative hotfixes for Sitecore Headless Rendering 22)
    - `SC Hotfix-PDXP-25202-1 Layout Service 10.0.6.zip` (Cumulative hotfixes for Sitecore Headless Rendering 22)

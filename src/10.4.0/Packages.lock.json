@@ -42,14 +42,14 @@
             "Sha256": "C373CDF49360D3A4E3023FDA5F9BACD110E73A01A508BDD631F255C9FBEBA7EA"
         },
         {
-            "Name": "Sitecore 10.4.2 rev. 014339 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip",
-            "Length": 11136085,
-            "Sha256": "50155B0D6ACBCD6787DB98C55C2D0557AF5AAC9CD2BA802130822BBEC3443D6C"
+            "Name": "Sitecore 10.4.2 rev. 014548 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip",
+            "Length": 38059881,
+            "Sha256": "0ACF86254B5020572722CC54615A8CA0BDD1892CAEB0DBD93558242634911F7D"
         },
         {
             "Name": "Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.cumulative.delta.scwdp.zip",
             "Length": 2783,
-            "Sha256": "533C699CAB955F2C2606ECD024FDA00ED4DC18D1C5AEE37E5BC90515B8804BF5"
+            "Sha256": "9888B4E47221C3CFECC675A6F2D466D55BB6697CDD55D4EC3CDC8833069AC327"
         },
         {
             "Name": "SC Hotfix-PDXP-22057-1 JSS 22.0.0.zip",
