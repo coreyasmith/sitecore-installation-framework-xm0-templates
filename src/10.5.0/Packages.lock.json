@@ -12,6 +12,11 @@
             "Sha256": "A844235B3D285AF40FE906EA4826CF2ECBF76CD2C92A2D16D2D0023065E64DA6"
         },
         {
+            "Name": "Sitecore Experience Accelerator XM 10.5.0 rev. 09321.scwdp.zip",
+            "Length": 29429070,
+            "Sha256": "16480B815AF28541514A092224D521179AF04FC0469BEA733D650EB4C3501947"
+        },
+        {
             "Name": "Sitecore Headless Services Server XM 23.0.32.scwdp.zip",
             "Length": 2084503,
             "Sha256": "DFC45EE4A06D7161A6D3648A1A40F4F89F601CB60C6FD2D65DA5767B7D9667D6"

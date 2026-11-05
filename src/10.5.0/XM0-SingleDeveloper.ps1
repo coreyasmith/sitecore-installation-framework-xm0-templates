@@ -53,6 +53,8 @@ $ManagementServicesPackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore.Ma
 $HeadlessServicesPackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore Headless Services Server XM*.scwdp.zip").FullName
 # The path to the Sitecore PowerShell Extensions Package to Deploy.
 $SPEPackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore.PowerShell.Extensions*.scwdp.zip").FullName
+# The path to the Sitecore Experience Accelerator (XM) Package to Deploy.
+$SXAPackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore Experience Accelerator XM*.scwdp.zip").FullName
 # The Identity Server password recovery URL, this should be the URL of the CM Instance
 $PasswordRecoveryUrl = "https://$SitecoreSiteName"
 # The URL of the Identity Server
@@ -102,14 +104,21 @@ $singleDeveloperParams = @{
     EnablePackageInstaller = $EnablePackageInstaller
 }
 
-# Install SPE via combined partials file.
-$speParams = @{
-    Path = "$SCInstallRoot\SPE-SingleDeveloper-XM0.json"
+# Install SPE + SXA via combined partials file.
+$sxaParams = @{
+    Path = "$SCInstallRoot\SXA-SingleDeveloper-XM0.json"
     SPEPackage = $SPEPackage
+    SXAPackage = $SXAPackage
     Prefix = $Prefix
+    SitecoreAdminPassword = $SitecoreAdminPassword
     SqlServer = $SqlServer
     SqlAdminUser = $SqlAdminUser
     SqlAdminPassword = $SqlAdminPassword
+    SolrUrl = $SolrUrl
+    SolrAdminUserName = $SolrAdminUserName
+    SolrAdminPassword = $SolrAdminPassword
+    SolrRoot = $SolrRoot
+    SolrService = $SolrService
     SiteName = $SitecoreSiteName
 }
 
@@ -135,7 +144,7 @@ Push-Location $SCInstallRoot
 
 if (!$Uninstall) {
     Install-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'XM0-SingleDeveloper.log')
-    Install-SitecoreConfiguration @speParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'SPE-SingleDeveloper.log')
+    Install-SitecoreConfiguration @sxaParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'SXA-SingleDeveloper.log')
     Install-SitecoreConfiguration @managementServicesParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore.ManagementServices-SingleDeveloper.log')
     Install-SitecoreConfiguration @headlessServicesParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore.HeadlessServices-SingleDeveloper.log')
 } else {
