@@ -201,12 +201,6 @@ $headlessServicesCumulativeHotfixGraphQLParams = @{
     SatToolsPath = $AzureToolkitToolsPath
 }
 
-# Install Security Bulletin SC2025-001-7922.
-$sc2025_001Params = @{
-    Path = "$SCInstallRoot\templates\sc2025-001-7922.json"
-    SiteName = $SitecoreSiteName
-}
-
 Push-Location $SCInstallRoot
 
 if (!$Uninstall) {
@@ -221,7 +215,6 @@ if (!$Uninstall) {
         Install-SitecoreConfiguration @headlessServicesCumulativeHotfixJSSParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore.HeadlessServices-CumulativeHotfix-JSS.log')
         Install-SitecoreConfiguration @headlessServicesCumulativeHotfixLayoutServiceParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore.HeadlessServices-CumulativeHotfix-LayoutService.log')
         Install-SitecoreConfiguration @headlessServicesCumulativeHotfixGraphQLParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore.HeadlessServices-CumulativeHotfix-GraphQL.log')
-        Install-SitecoreConfiguration @sc2025_001Params *>&1 | Tee-Object (Join-Path $LogsDirectory 'SC2025-001-7922.log')
     }
 } else {
     Uninstall-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'XM0-SingleDeveloper-Uninstall.log')

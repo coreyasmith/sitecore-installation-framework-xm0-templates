@@ -1,6 +1,6 @@
 # 🏗️ XM Single (XM0) templates for Sitecore 10.2
 
-XM Single (XM0) templates for [Sitecore 10.2][1]. These templates install a full headless stack with the latest cumulative hotfixes[^1] and security bulletins.
+XM Single (XM0) templates for [Sitecore 10.2][1]. These templates install a full headless stack with the latest cumulative hotfixes[^1].
 
 ## ⭐ Packages Installed
 
@@ -15,7 +15,6 @@ XM Single (XM0) templates for [Sitecore 10.2][1]. These templates install a full
 | Cumulative hotfix for Sitecore XP 10.2[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001439> |
 | Cumulative hotfix for SXA 10.2.0[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001757> |
 | Cumulative hotfixes for Sitecore Headless Rendering 20[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003202> |
-| Security Bulletin SC2025-001-7922[^2] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003633> |
 
 ## 📦 Required Files and Packages
 
@@ -50,7 +49,7 @@ XM Single (XM0) templates for [Sitecore 10.2][1]. These templates install a full
 4. Install Solr with `Solr-SingleDeveloper.ps1`.
 5. Update variables in [`XM0-SingleDeveloper.ps1`](./XM0-SingleDeveloper.ps1) (e.g., `$SqlAdminPassword`).
 6. Install Sitecore with `XM0-SingleDeveloper.ps1`.
-7. Install Sitecore cumulative hotfixes and security bulletins with `XM0-SingleDeveloper.ps1 -Update`.
+7. Install Sitecore cumulative hotfixes with `XM0-SingleDeveloper.ps1 -Update`.
 
 ### Module Install Notes
 
@@ -63,7 +62,6 @@ XM Single (XM0) templates for [Sitecore 10.2][1]. These templates install a full
 2. Uninstall Solr with `Solr-SingleDeveloper.ps1 -Uninstall`.
 
 [^1]: Sitecore Support releases new versions of cumulative hotfixes on a regular basis. When they publish a new version, the old versions are removed from their downloads. The cumulative hotfix versions listed here may not reflect the most recent version. If the currently available version does not work with these templates, please open an issue.
-[^2]: There is no package for this bulletin. The patch is applied through [templates/files/sc2025-001-7922/Web.config.xdt](templates/files/sc2025-001-7922/Web.config.xdt).
 
 [1]: https://developers.sitecore.com/downloads/Sitecore_Experience_Platform/102/Sitecore_Experience_Platform_102
 [2]: https://developers.sitecore.com/downloads/Sitecore_Azure_Toolkit/3x/Sitecore_Azure_Toolkit_300
