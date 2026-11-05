@@ -46,7 +46,7 @@ $SqlTrustServerCertificate = "true"
 # The path to the Sitecore Package to Deploy.
 $SitecorePackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore 10.5.0 rev. * (XM) (OnPrem)_cm.scwdp.zip").FullName
 # The path to the Identity Server Package to Deploy.
-$IdentityServerPackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore.IdentityServer * rev. 7 (OnPrem)_identityserver.*scwdp.zip").FullName
+$IdentityServerPackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore.IdentityServer * rev. 7 (OnPrem)_identityserver.scwdp.zip").FullName
 # The path to the Sitecore Management Services Package to Deploy.
 $ManagementServicesPackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore.ManagementServices*.scwdp.zip").FullName
 # The path to the Sitecore Headless Services Package to Deploy.
@@ -72,6 +72,11 @@ $EnablePackageInstaller = $true
 
 # The directory to write logs to.
 $LogsDirectory = "$SCInstallRoot\logs"
+
+if ($Update) {
+    $SitecorePackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore 10.5.* PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip").FullName
+    $IdentityServerPackage = (Get-ChildItem "$SCInstallRoot\packages\Sitecore.IdentityServer * rev. * (OnPrem)_identityserver.cumulative.delta.scwdp.zip").FullName
+}
 
 # Install XM0 via combined partials file.
 $singleDeveloperParams = @{

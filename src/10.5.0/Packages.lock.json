@@ -35,6 +35,16 @@
             "Name": "Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip",
             "Length": 2063550,
             "Sha256": "C373CDF49360D3A4E3023FDA5F9BACD110E73A01A508BDD631F255C9FBEBA7EA"
+        },
+        {
+            "Name": "Sitecore 10.5.1 rev. 014617 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip",
+            "Length": 28552333,
+            "Sha256": "785F05AB311D556D32FA1DF826AA45F6F5DEC62A8A89356CBE1D97D3DC4FD799"
+        },
+        {
+            "Name": "Sitecore.IdentityServer 9.0 rev. 7 (OnPrem)_identityserver.cumulative.delta.scwdp.zip",
+            "Length": 2787,
+            "Sha256": "DBB59DEC8E9820ABA9C48988776F521D5AACAFFF6A3441AFC6B421463EEDFC42"
         }
     ]
 }
