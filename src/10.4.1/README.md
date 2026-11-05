@@ -31,8 +31,8 @@ XM Single (XM0) templates for [Sitecore 10.4 Update-1][1]. These templates insta
    - `Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.delta.scwdp.zip`[^1] (extract from `Sitecore 10.4.2 rev. 014548 (DELTA WDP XM1 packages).zip`)
    - `SC Hotfix-PDXP-22057-1 JSS 22.0.0.zip` (Cumulative hotfixes for Sitecore Headless Rendering 22)
    - `SC Hotfix-PDXP-22153-1 GraphQL 8.0.0.zip` (Cumulative hotfixes for Sitecore Headless Rendering 22)
-   - `SC Hotfix-PDXP-25202-1 Layout Service 10.0.6.zip` (Cumulative hotfixes for Sitecore Headless Rendering 22)
-   - `SC Hotfix SXA-9041-2 10.4.0 rev. 08675.zip` (Cumulative hotfix for SXA 10.4.0)
+   - `SC Hotfix-PDXP-32433-1 Layout Service 10.0.0.zip` (Cumulative hotfixes for Sitecore Headless Rendering 22)
+   - `SC Hotfix SXA-9197-1 10.4.0 rev. 08675.zip` (Cumulative hotfix for SXA 10.4.0)
 
 > [!NOTE]
 > If you change the packages required for your install:

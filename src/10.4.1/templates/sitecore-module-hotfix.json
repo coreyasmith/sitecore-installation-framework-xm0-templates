@@ -20,6 +20,11 @@
             "Description": "Should the XdtDirectory be removed after deployment.",
             "DefaultValue": true
         },
+        "TransformsDirectory": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The path of the folder that contains the XDT transforms the hotfix instructions require, applied to the website root."
+        },
         "FilesDirectory": {
             "Type": "string",
             "DefaultValue": "",
@@ -121,6 +126,15 @@
                 "ErrorAction": "SilentlyContinue"
             },
             "Skip": "[or(not(parameter('XdtDirectory')), not(parameter('CleanupXdts')), not(TestPath(joinpath(variable('Site.DataFolder'), parameter('XdtDirectory')))))]"
+        },
+        "ApplyHotfixTransforms": {
+            "Description": "Applies the XDT transforms the hotfix instructions require.",
+            "Type": "TransformXmlDoc",
+            "Params": {
+                "RootDirectoryPath": "[variable('Site.PhysicalPath')]",
+                "XdtDirectory": "[resolvepath(parameter('TransformsDirectory'))]"
+            },
+            "Skip": "[not(parameter('TransformsDirectory'))]"
         },
         "CopyPatchFiles": {
             "Description": "Copies the hotfix instruction files into the website root.",

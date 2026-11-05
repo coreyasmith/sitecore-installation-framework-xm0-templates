@@ -151,6 +151,7 @@ $sxaCumulativeHotfixParams = @{
     SiteName = $SitecoreSiteName
     Package = $SXACumulativeHotfixPackage
     SatToolsPath = $AzureToolkitToolsPath
+    TransformsDirectory = "$SCInstallRoot\templates\files\sc-hotfix-sxa-9197-1"
 }
 
 # Install the Headless Services JSS cumulative hotfix.

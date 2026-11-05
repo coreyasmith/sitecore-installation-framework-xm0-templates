@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly xdt:Locator="Condition(_defaultNamespace:assemblyIdentity/@name='System.Text.Json')">
+        <bindingRedirect oldVersion="0.0.0.0-10.0.0.0" xdt:Transform="SetAttributes(oldVersion)" />
+      </dependentAssembly>
+      <dependentAssembly xdt:Locator="Condition(_defaultNamespace:assemblyIdentity/@name='System.Threading.Tasks.Extensions')">
+        <bindingRedirect oldVersion="0.0.0.0-4.2.1.0" xdt:Transform="SetAttributes(oldVersion)" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+</configuration>
