@@ -11,7 +11,7 @@ XM Single (XM0) templates for [Sitecore 10.1 Update-3][1]. These templates insta
 | Sitecore Experience Accelerator 10.1.0 | <https://developers.sitecore.com/downloads/Sitecore_Experience_Accelerator/10x/Sitecore_Experience_Accelerator_1010> |
 | Sitecore Headless Rendering 18.0.0 | <https://developers.sitecore.com/downloads/Sitecore_Headless_Rendering/18x/Sitecore_Headless_Rendering_1800> |
 | Sitecore Management Services 5.2.129 | <https://developers.sitecore.com/downloads/Sitecore_CLI/7x/Sitecore_CLI_7024> |
-| Sitecore PowerShell Extensions 8.0 | <https://github.com/SitecorePowerShell/Console/releases/download/8.0/Sitecore.PowerShell.Extensions-8.0.scwdp.zip> |
+| Sitecore PowerShell Extensions 9.0.2 | <https://github.com/SitecorePowerShell/Console/releases/download/9.0.2/Sitecore.PowerShell.Extensions-9.0.2.scwdp.zip> |
 | Cumulative hotfix for Sitecore XP 10.1[^1][^2] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001300> |
 | Cumulative hotfix for SXA 10.1.0[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001756> |
 | Cumulative hotfixes for Sitecore Headless Rendering 18[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003204> |
@@ -28,7 +28,7 @@ XM Single (XM0) templates for [Sitecore 10.1 Update-3][1]. These templates insta
    - `Sitecore.IdentityServer.8.0.37.scwdp.zip` (_Sitecore Identity Server WDP_ for _On-premises deployments_)
    - `Sitecore.IdentityServer.UpgradeScripts.8.0.zip` (_Identity Server Upgrade Script_ for _On-premises deployments_)
    - `Sitecore.ManagementServices 5.2.129.scwdp.zip`
-   - `Sitecore.PowerShell.Extensions-8.0.scwdp.zip`
+   - `Sitecore.PowerShell.Extensions-9.0.2.scwdp.zip`
    - `Sitecore 10.1.4 rev. 013779 PRE (XM) (OnPrem)_cm.delta.scwdp.zip`[^1] (extract from `Sitecore 10.1.4 rev. 013779 (DELTA WDP XM1 packages).zip`)
    - `Sitecore.IdentityServer 8.0 rev. 28 (OnPrem)_identityserver.delta.scwdp.zip`[^1] (extract from `Sitecore 10.1.4 rev. 013779 (DELTA WDP XM1 packages).zip`)
    - `SC Hotfix SXA-8159-1 10.1.0.3751.zip` (Cumulative hotfix for SXA 10.1.0)

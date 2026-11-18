@@ -10,7 +10,7 @@ XM Single (XM0) templates for [Sitecore 10.5][1]. These templates install a full
 | Sitecore Experience Accelerator 10.5.0 | <https://developers.sitecore.com/downloads/Sitecore_Experience_Accelerator/10x/Sitecore_Experience_Accelerator_1050> |
 | Sitecore Headless Rendering 23.0.0 | <https://developers.sitecore.com/downloads/Sitecore_Headless_Rendering/23x/Sitecore_Headless_Rendering_2300> |
 | Sitecore Management Services 5.2.129 | <https://developers.sitecore.com/downloads/Sitecore_CLI/7x/Sitecore_CLI_7024> |
-| Sitecore PowerShell Extensions 8.0 | <https://github.com/SitecorePowerShell/Console/releases/download/8.0/Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip> |
+| Sitecore PowerShell Extensions 9.0.2 | <https://github.com/SitecorePowerShell/Console/releases/download/9.0.2/Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip> |
 | Cumulative hotfix for Sitecore XP 10.5[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1010636> |
 
 ## 📦 Required Files and Packages
@@ -22,7 +22,7 @@ XM Single (XM0) templates for [Sitecore 10.5][1]. These templates install a full
    - `Sitecore Headless Services Server XM 23.0.32.scwdp.zip`
    - `Sitecore.IdentityServer 9.0 rev. 7 (OnPrem)_identityserver.scwdp.zip` (extract from _Packages for XM Scaled_ for _On Premises deployment_)
    - `Sitecore.ManagementServices 5.2.129.scwdp.zip`
-   - `Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip`
+   - `Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip`
    - `Sitecore 10.5.1 rev. 014617 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.5.1 rev. 014617 (CUMULATIVE DELTA WDP XM1 packages).zip`)
    - `Sitecore.IdentityServer 9.0 rev. 7 (OnPrem)_identityserver.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.5.1 rev. 014617 (CUMULATIVE DELTA WDP XM1 packages).zip`)
 

@@ -11,7 +11,7 @@ XM Single (XM0) templates for [Sitecore 10.4][1]. These templates install a full
 | Sitecore Experience Accelerator 10.4.0 | <https://developers.sitecore.com/downloads/Sitecore_Experience_Accelerator/10x/Sitecore_Experience_Accelerator_1040> |
 | Sitecore Headless Rendering 22.0.0 | <https://developers.sitecore.com/downloads/Sitecore_Headless_Rendering/22x/Sitecore_Headless_Rendering_2200> |
 | Sitecore Management Services 5.2.129 | <https://developers.sitecore.com/downloads/Sitecore_CLI/7x/Sitecore_CLI_7024> |
-| Sitecore PowerShell Extensions 8.0 | <https://github.com/SitecorePowerShell/Console/releases/download/8.0/Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip> |
+| Sitecore PowerShell Extensions 9.0.2 | <https://github.com/SitecorePowerShell/Console/releases/download/9.0.2/Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip> |
 | Cumulative hotfix for Sitecore XP 10.4[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003424> |
 | Cumulative hotfix for SXA 10.4.0[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003459> |
 | Cumulative hotfixes for Sitecore Headless Rendering 22[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003203> |
@@ -27,7 +27,7 @@ XM Single (XM0) templates for [Sitecore 10.4][1]. These templates install a full
    - `Sitecore.IdentityServer.9.0.7.scwdp.zip` (_Sitecore Identity Server WDP_ for _On-premises deployments_)
    - `Sitecore.IdentityServer.UpgradeScripts.9.0.zip` (_Identity Server Upgrade Script_ for _On-premises deployments_)
    - `Sitecore.ManagementServices 5.2.129.scwdp.zip`
-   - `Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip`
+   - `Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip`
    - `Sitecore 10.4.2 rev. 014548 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.4.2 rev. 014548 (CUMULATIVE DELTA WDP XM1 packages).zip`)
    - `Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.4.2 rev. 014548 (CUMULATIVE DELTA WDP XM1 packages).zip`)
    - `SC Hotfix-PDXP-22057-1 JSS 22.0.0.zip` (Cumulative hotfixes for Sitecore Headless Rendering 22)

@@ -11,7 +11,7 @@ XM Single (XM0) templates for [Sitecore 10.3 Update-2][1]. These templates insta
 | Sitecore Experience Accelerator 10.3.0 | <https://developers.sitecore.com/downloads/Sitecore_Experience_Accelerator/10x/Sitecore_Experience_Accelerator_1030> |
 | Sitecore Headless Rendering 21.0.1 | <https://developers.sitecore.com/downloads/Sitecore_Headless_Rendering/21x/Sitecore_Headless_Rendering_2101> |
 | Sitecore Management Services 5.2.129 | <https://developers.sitecore.com/downloads/Sitecore_CLI/7x/Sitecore_CLI_7024> |
-| Sitecore PowerShell Extensions 8.0 | <https://github.com/SitecorePowerShell/Console/releases/download/8.0/Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip> |
+| Sitecore PowerShell Extensions 9.0.2 | <https://github.com/SitecorePowerShell/Console/releases/download/9.0.2/Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip> |
 | Cumulative hotfix for Sitecore XP 10.3[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1002844> |
 | Cumulative hotfix for SXA 10.3.0[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1002845> |
 | Cumulative hotfixes for Sitecore Headless Rendering 21[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003184> |
@@ -27,7 +27,7 @@ XM Single (XM0) templates for [Sitecore 10.3 Update-2][1]. These templates insta
    - `Sitecore.IdentityServer.9.0.7.scwdp.zip` (_Sitecore Identity Server WDP_ for _On-premises deployments_)
    - `Sitecore.IdentityServer.UpgradeScripts.9.0.zip` (_Identity Server Upgrade Script_ for _On-premises deployments_)
    - `Sitecore.ManagementServices 5.2.129.scwdp.zip`
-   - `Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip`
+   - `Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip`
    - `Sitecore 10.3.4 rev. 014468 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.3.4 rev. 014468 (CUMULATIVE DELTA WDP XM1 packages).zip`)
    - `Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.3.4 rev. 014468 (CUMULATIVE DELTA WDP XM1 packages).zip`)
    - `SC Hotfix 616573-1 Layout Service 9.0.0.zip` (Cumulative hotfixes for Sitecore Headless Rendering 21)

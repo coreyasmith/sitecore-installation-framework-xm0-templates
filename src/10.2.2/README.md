@@ -11,7 +11,7 @@ XM Single (XM0) templates for [Sitecore 10.2 Update-2][1]. These templates insta
 | Sitecore Experience Accelerator 10.2.0 | <https://developers.sitecore.com/downloads/Sitecore_Experience_Accelerator/10x/Sitecore_Experience_Accelerator_1020> |
 | Sitecore Headless Rendering 20.0.2 | <https://developers.sitecore.com/downloads/Sitecore_Headless_Rendering/20x/Sitecore_Headless_Rendering_2002> |
 | Sitecore Management Services 5.2.129 | <https://developers.sitecore.com/downloads/Sitecore_CLI/7x/Sitecore_CLI_7024> |
-| Sitecore PowerShell Extensions 8.0 | <https://github.com/SitecorePowerShell/Console/releases/download/8.0/Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip> |
+| Sitecore PowerShell Extensions 9.0.2 | <https://github.com/SitecorePowerShell/Console/releases/download/9.0.2/Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip> |
 | Cumulative hotfix for Sitecore XP 10.2[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001439> |
 | Cumulative hotfix for SXA 10.2.0[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001757> |
 | Cumulative hotfixes for Sitecore Headless Rendering 20[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003202> |
@@ -27,7 +27,7 @@ XM Single (XM0) templates for [Sitecore 10.2 Update-2][1]. These templates insta
    - `Sitecore.IdentityServer.8.0.37.scwdp.zip` (_Sitecore Identity Server WDP_ for _On-premises deployments_)
    - `Sitecore.IdentityServer.UpgradeScripts.8.0.zip` (_Identity Server Upgrade Script_ for _On-premises deployments_)
    - `Sitecore.ManagementServices 5.2.129.scwdp.zip`
-   - `Sitecore.PowerShell.Extensions-8.0-IAR.scwdp.zip`
+   - `Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip`
    - `Sitecore 10.2.3 rev. 014675 PRE (XM) (OnPrem)_cm.delta.scwdp.zip`[^1] (extract from `Sitecore 10.2.3 rev. 014675 (DELTA WDP XM1 packages).zip`)
    - `Sitecore.IdentityServer 8.0 rev. 37 (OnPrem)_identityserver.delta.scwdp.zip`[^1] (extract from `Sitecore 10.2.3 rev. 014675 (DELTA WDP XM1 packages).zip`)
    - `SC Hotfix 609694-1 Layout Service 8.1.0.zip` (Cumulative hotfixes for Sitecore Headless Rendering 20)
@@ -54,7 +54,7 @@ XM Single (XM0) templates for [Sitecore 10.2 Update-2][1]. These templates insta
 ### Module Install Notes
 
 > [!WARNING]
-> [Cumulative hotfix for SXA 10.2.0][3] installs the [Sitecore PowerShell Extensions (SPE) 6.3][4] IAR files, so [SPE 8][5] is reinstalled after [Cumulative hotfix for SXA 10.2.0][3] in [Sitecore 10.2 Update-2][1]. If you install [SPE 6.3][4], you can remove the reinstall of SPE after [Cumulative hotfix for SXA 10.2.0][3].
+> [Cumulative hotfix for SXA 10.2.0][3] installs the [Sitecore PowerShell Extensions (SPE) 6.3][4] IAR files, so [SPE 9][5] is reinstalled after [Cumulative hotfix for SXA 10.2.0][3] in [Sitecore 10.2 Update-2][1]. If you install [SPE 6.3][4], you can remove the reinstall of SPE after [Cumulative hotfix for SXA 10.2.0][3].
 
 ## 🚮 Uninstall
 
@@ -67,4 +67,4 @@ XM Single (XM0) templates for [Sitecore 10.2 Update-2][1]. These templates insta
 [2]: https://developers.sitecore.com/downloads/Sitecore_Azure_Toolkit/3x/Sitecore_Azure_Toolkit_300
 [3]: https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001757
 [4]: https://github.com/SitecorePowerShell/Console/releases#release-6.3
-[5]: https://github.com/SitecorePowerShell/Console/releases#release-8.0
+[5]: https://github.com/SitecorePowerShell/Console/releases#release-9.0.2

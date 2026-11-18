@@ -11,7 +11,7 @@ XM Single (XM0) templates for [Sitecore 10.0 Update-3][1]. These templates insta
 | Sitecore Experience Accelerator 10.0.0 | <https://developers.sitecore.com/downloads/Sitecore_Experience_Accelerator/10x/Sitecore_Experience_Accelerator_1000> |
 | Sitecore Headless Rendering 15.0.1 | <https://developers.sitecore.com/downloads/Sitecore_Headless_Rendering/150/Sitecore_Headless_Rendering_1501> |
 | Sitecore Management Services 2.0.0 | <https://developers.sitecore.com/downloads/Sitecore_CLI/2x/Sitecore_CLI_200> |
-| Sitecore PowerShell Extensions 8.0 | <https://github.com/SitecorePowerShell/Console/releases/download/8.0/Sitecore.PowerShell.Extensions-8.0.scwdp.zip> |
+| Sitecore PowerShell Extensions 9.0.2 | <https://github.com/SitecorePowerShell/Console/releases/download/9.0.2/Sitecore.PowerShell.Extensions-9.0.2.scwdp.zip> |
 | Cumulative hotfix for Sitecore 10.0.0 (XM)[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001333> |
 | Cumulative hotfix for SXA 10.0.0[^1] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1001755> |
 | Security Bulletin SC2025-001-7922[^2] | <https://support.sitecore.com/kb?id=kb_article_view&sysparm_article=KB1003633> |
@@ -30,7 +30,7 @@ XM Single (XM0) templates for [Sitecore 10.0 Update-3][1]. These templates insta
    - `Sitecore.IdentityServer.8.0.37.scwdp.zip` (_Sitecore Identity Server WDP_ for _On-premises deployments_)
    - `Sitecore.IdentityServer.UpgradeScripts.8.0.zip` (_Identity Server Upgrade Script_ for _On-premises deployments_)
    - `Sitecore.ManagementServices 2.0.0-r00202.scwdp.zip`
-   - `Sitecore.PowerShell.Extensions-8.0.scwdp.zip`
+   - `Sitecore.PowerShell.Extensions-9.0.2.scwdp.zip`
    - `SC Hotfix 591876-1.zip` (Cumulative hotfix for Sitecore 10.0.0)
    - `SC Hotfix SXA-8159-1 10.0.0.3138.zip` (Cumulative hotfix for SXA 10.0.0)
    - `Sitecore.Support.PDXP-9109.zip` (Security Bulletin SC2025-002-9109)
@@ -52,14 +52,6 @@ XM Single (XM0) templates for [Sitecore 10.0 Update-3][1]. These templates insta
 5. Update variables in [`XM0-SingleDeveloper.ps1`](./XM0-SingleDeveloper.ps1) (e.g., `$SqlAdminPassword`).
 6. Install Sitecore with `XM0-SingleDeveloper.ps1`.
 7. Install Sitecore cumulative hotfixes and security bulletins with `XM0-SingleDeveloper.ps1 -Update`.
-
-### 🧹 Postinstall Steps
-
-If the Sitecore PowerShell Extensions buttons on the Launchpad have broken icons:
-
-1. Open `/sitecore/system/Modules/PowerShell/Script Library/SPE/Core/Platform/Upgrade/Compatibility` in the PowerShell ISE.
-2. Change `$oldVersion = New-Object System.Version(10,0)` to `$oldVersion = New-Object System.Version(10,1)`.
-3. Execute the script.
 
 ## 🚮 Uninstall
 
