@@ -1,0 +1,71 @@
+{
+    "Parameters": {
+        "SolrUrl": {
+            "Type": "string",
+            "DefaultValue": "https://localhost:8983/solr",
+            "Description": "The Solr instance url."
+        },
+        "SolrAdminUserName": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The Solr administrator username supplied by the installer."
+        },
+        "SolrAdminPassword": {
+            "Type": "string",
+            "DefaultValue": "",
+            "Description": "The Solr administrator password supplied by the installer."
+        },
+        "CorePrefix": {
+            "Type": "string",
+            "DefaultValue": "sitecore",
+            "Description": "The prefix of the SXA cores to remove."
+        }
+    },
+    "Variables": {
+        "Master.Name": "[concat(parameter('CorePrefix'), '_sxa_master_index')]",
+        "Web.Name": "[concat(parameter('CorePrefix'), '_sxa_web_index')]",
+
+        "Solr.Credentials": "[concat(parameter('SolrAdminUserName'), ':', parameter('SolrAdminPassword'))]",
+        "Solr.Credentials.Base64": "[InvokeExpression(Command:variable('Solr.Credentials.Base64.Command'))]",
+        "Solr.Credentials.Base64.Command": "[concat('[Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(\"', variable('Solr.Credentials'), '\"))')]",
+        "Solr.Authorization": "[concat('Basic ', variable('Solr.Credentials.Base64'))]"
+    },
+    "Register": {
+        "ConfigFunction": {
+            "InvokeExpression": "Invoke-Expression"
+        }
+    },
+    "Tasks": {},
+    "UninstallTasks": {
+        "RemoveCores": {
+            "Description": "Removes the SXA cores and their instance folders, which sxa-solr.json doesn't remove on uninstall.",
+            "Type": "ManageSolrCore",
+            "Params": [
+                {
+                    "Action": "Unload",
+                    "Address": "[parameter('SolrUrl')]",
+                    "Headers": {
+                        "Authorization": "[variable('Solr.Authorization')]"
+                    },
+                    "Arguments": {
+                        "core": "[variable('Master.Name')]",
+                        "deleteInstanceDir": "true"
+                    },
+                    "ErrorAction": "SilentlyContinue"
+                },
+                {
+                    "Action": "Unload",
+                    "Address": "[parameter('SolrUrl')]",
+                    "Headers": {
+                        "Authorization": "[variable('Solr.Authorization')]"
+                    },
+                    "Arguments": {
+                        "core": "[variable('Web.Name')]",
+                        "deleteInstanceDir": "true"
+                    },
+                    "ErrorAction": "SilentlyContinue"
+                }
+            ]
+        }
+    }
+}

@@ -93,6 +93,13 @@ $sxaParams = @{
     SiteName = $SitecoreSiteName
 }
 
+# Remove the SXA Solr cores on uninstall, since the stock sxa-solr.json has no uninstall tasks.
+$sxaSolrUninstallParams = @{
+    Path = "$SCInstallRoot\templates\sxa-solr-uninstall.json"
+    SolrUrl = $SolrUrl
+    CorePrefix = $Prefix
+}
+
 # Install Security Bulletin SC2023-003-587441.
 $sc2023_003Params = @{
     Path = "$SCInstallRoot\templates\sitecore-hotfix.json"
@@ -135,6 +142,7 @@ if (!$Uninstall) {
         Install-SitecoreConfiguration @sc2025_003Params *>&1 | Tee-Object (Join-Path $LogsDirectory 'SC2025-003.log')
     }
 } else {
+    Uninstall-SitecoreConfiguration @sxaSolrUninstallParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'SXA-Solr-Uninstall.log')
     Uninstall-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'XM0-SingleDeveloper-Uninstall.log')
 }
 

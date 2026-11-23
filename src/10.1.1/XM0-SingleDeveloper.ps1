@@ -134,6 +134,13 @@ $sxaParams = @{
     SiteName = $SitecoreSiteName
 }
 
+# Remove the SXA Solr cores on uninstall, since the stock sxa-solr.json has no uninstall tasks.
+$sxaSolrUninstallParams = @{
+    Path = "$SCInstallRoot\templates\sxa-solr-uninstall.json"
+    SolrUrl = $SolrUrl
+    CorePrefix = $Prefix
+}
+
 # Install Sitecore Headless Services on the XM0 CM site.
 $headlessServicesParams = @{
     Path = "$SCInstallRoot\Sitecore.HeadlessServices-XM0.json"
@@ -210,6 +217,7 @@ if (!$Uninstall) {
         Install-SitecoreConfiguration @sc2025_001Params *>&1 | Tee-Object (Join-Path $LogsDirectory 'SC2025-001-7922.log')
     }
 } else {
+    Uninstall-SitecoreConfiguration @sxaSolrUninstallParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'SXA-Solr-Uninstall.log')
     Uninstall-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'XM0-SingleDeveloper-Uninstall.log')
 }
 

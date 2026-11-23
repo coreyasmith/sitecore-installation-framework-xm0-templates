@@ -1,0 +1,45 @@
+{
+    "Parameters": {
+        "SolrUrl": {
+            "Type": "string",
+            "DefaultValue": "https://localhost:8983/solr",
+            "Description": "The Solr instance url."
+        },
+        "CorePrefix": {
+            "Type": "string",
+            "DefaultValue": "sitecore",
+            "Description": "The prefix of the SXA cores to remove."
+        }
+    },
+    "Variables": {
+        "Master.Name": "[concat(parameter('CorePrefix'), '_sxa_master_index')]",
+        "Web.Name": "[concat(parameter('CorePrefix'), '_sxa_web_index')]"
+    },
+    "Tasks": {},
+    "UninstallTasks": {
+        "RemoveCores": {
+            "Description": "Removes the SXA cores and their instance folders, which sxa-solr.json doesn't remove on uninstall.",
+            "Type": "ManageSolrCore",
+            "Params": [
+                {
+                    "Action": "Unload",
+                    "Address": "[parameter('SolrUrl')]",
+                    "Arguments": {
+                        "core": "[variable('Master.Name')]",
+                        "deleteInstanceDir": "true"
+                    },
+                    "ErrorAction": "SilentlyContinue"
+                },
+                {
+                    "Action": "Unload",
+                    "Address": "[parameter('SolrUrl')]",
+                    "Arguments": {
+                        "core": "[variable('Web.Name')]",
+                        "deleteInstanceDir": "true"
+                    },
+                    "ErrorAction": "SilentlyContinue"
+                }
+            ]
+        }
+    }
+}
