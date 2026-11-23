@@ -145,6 +145,12 @@ $headlessServicesParams = @{
     SqlDbPrefix = $Prefix
 }
 
+# Apply the Sitecore cumulative update instructions.
+$sitecoreUpdateParams = @{
+    Path = "$SCInstallRoot\templates\sitecore-update.json"
+    SiteName = $SitecoreSiteName
+}
+
 Push-Location $SCInstallRoot
 
 if (!$Uninstall) {
@@ -152,6 +158,9 @@ if (!$Uninstall) {
     Install-SitecoreConfiguration @sxaParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'SXA-SingleDeveloper.log')
     Install-SitecoreConfiguration @managementServicesParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore.ManagementServices-SingleDeveloper.log')
     Install-SitecoreConfiguration @headlessServicesParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore.HeadlessServices-SingleDeveloper.log')
+    if ($Update) {
+        Install-SitecoreConfiguration @sitecoreUpdateParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'Sitecore-Update.log')
+    }
 } else {
     Uninstall-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object (Join-Path $LogsDirectory 'XM0-SingleDeveloper-Uninstall.log')
 }

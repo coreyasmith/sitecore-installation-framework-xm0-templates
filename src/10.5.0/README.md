@@ -23,8 +23,8 @@ XM Single (XM0) templates for [Sitecore 10.5][1]. These templates install a full
    - `Sitecore.IdentityServer 9.0 rev. 7 (OnPrem)_identityserver.scwdp.zip` (extract from _Packages for XM Scaled_ for _On Premises deployment_)
    - `Sitecore.ManagementServices 5.2.129.scwdp.zip`
    - `Sitecore.PowerShell.Extensions-9.0.2-IAR.scwdp.zip`
-   - `Sitecore 10.5.1 rev. 014617 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.5.1 rev. 014617 (CUMULATIVE DELTA WDP XM1 packages).zip`)
-   - `Sitecore.IdentityServer 9.0 rev. 7 (OnPrem)_identityserver.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.5.1 rev. 014617 (CUMULATIVE DELTA WDP XM1 packages).zip`)
+   - `Sitecore 10.5.1 rev. 014687 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.5.1 rev. 014687 (CUMULATIVE DELTA WDP XM1 packages).zip`)
+   - `Sitecore.IdentityServer 9.0 rev. 7 (OnPrem)_identityserver.cumulative.delta.scwdp.zip`[^1] (extract from `Sitecore 10.5.1 rev. 014687 (CUMULATIVE DELTA WDP XM1 packages).zip`)
 
 > [!NOTE]
 > If you change the packages required for your install:

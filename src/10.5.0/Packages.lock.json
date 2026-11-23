@@ -37,14 +37,14 @@
             "Sha256": "01F79DAF2243FD88C8887ED2254BA613EA04A466352882C786ECC7080F9E96D9"
         },
         {
-            "Name": "Sitecore 10.5.1 rev. 014617 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip",
-            "Length": 28552333,
-            "Sha256": "785F05AB311D556D32FA1DF826AA45F6F5DEC62A8A89356CBE1D97D3DC4FD799"
+            "Name": "Sitecore 10.5.1 rev. 014687 PRE (XM) (OnPrem)_cm.cumulative.delta.scwdp.zip",
+            "Length": 32585796,
+            "Sha256": "FA3D9A0CF628AE53726ED493D484C8F6E551236B3236031322CB727284853ABC"
         },
         {
             "Name": "Sitecore.IdentityServer 9.0 rev. 7 (OnPrem)_identityserver.cumulative.delta.scwdp.zip",
             "Length": 2787,
-            "Sha256": "DBB59DEC8E9820ABA9C48988776F521D5AACAFFF6A3441AFC6B421463EEDFC42"
+            "Sha256": "08B1CE8E9F8A7E2928FC331544F184CC1D6A1FF9EDDBDB4069E1AC64A6E7517A"
         }
     ]
 }

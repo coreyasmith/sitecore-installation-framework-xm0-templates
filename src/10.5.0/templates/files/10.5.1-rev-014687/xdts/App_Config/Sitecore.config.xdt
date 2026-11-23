@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sitecore xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+    <settings>
+        <!-- PDXP-11503: The cumulative hotfix adds this setting as false. Its instructions require true. -->
+        <setting name="LayoutDetails.EnableBreakingRenderingsDetection" value="true" xdt:Transform="SetAttributes(value)" xdt:Locator="Match(name)" />
+        <!-- PDXP-26424: The cumulative hotfix adds this setting as true. Its instructions require false. -->
+        <setting name="ItemSerialization.AllowFallbackLanguageVersion" value="false" xdt:Transform="SetAttributes(value)" xdt:Locator="Match(name)" />
+    </settings>
+</sitecore>
